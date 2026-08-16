@@ -30,7 +30,12 @@ function euro(n){return new Intl.NumberFormat("it-IT",{style:"currency",currency
 function calc(){const i=Number(F.value),j=Number(A.value),x=MATRIX[i][j];route.textContent=F.options[F.selectedIndex].text+" → "+A.options[A.selectedIndex].text;warn.style.display="none";
 if(i===j){tratta.textContent="—";price.textContent="—";fascia.textContent="—";return}
 if(x==null){tratta.textContent="VERIFICARE";price.textContent="—";fascia.textContent="—";warn.textContent="Incrocio non leggibile con certezza nella tabella originale.";warn.style.display="block";return}
-const z=TARIFFS[String(x)];tratta.textContent=x;fascia.textContent=z?z[0]+" km":"—";price.textContent=z?euro(z[1]):"—";}
+const z=TARIFFS[String(x)];tratta.textContent=x;fascia.textContent=z?z[0]+" km":"—";
+const ridotte=["ELMAS","MASAINAS","MUSEI","PISCINAS","VALLERMOSA","VILLAPERUCCIO"];
+const partenza=F.options[F.selectedIndex].text;
+const tariffa=z?(ridotte.includes(partenza)?Math.max(0,z[1]-1):z[1]):null;
+price.textContent=tariffa!=null?euro(tariffa):"—";
+if(z && ridotte.includes(partenza)){warn.textContent="Tariffa a bordo ridotta di € 1,00 per partenza da "+partenza+".";warn.style.display="block";}}
 document.getElementById("calc").onclick=calc;document.getElementById("swap").onclick=()=>{let x=F.value;F.value=A.value;A.value=x;calc()};F.onchange=calc;A.onchange=calc;calc();
 </script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js"));}</script>
 </body></html>
