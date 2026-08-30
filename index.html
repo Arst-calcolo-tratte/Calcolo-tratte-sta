@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tratte STA">
-<meta name="theme-color" content="#0E3050">
+<meta name="theme-color" content="#1B5FA6">
 <meta name="description" content="Calcolo rapido di numero tratta e tariffa a bordo per la rete STA Iglesias.">
 <title>STA Iglesias · Calcolo Tratta</title>
 <link rel="manifest" href="./manifest.webmanifest">
@@ -14,53 +14,52 @@
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0E3050;
-    --navy-deep:#092136;
-    --paper:#FBF7EF;
-    --bg:#EEF1F0;
-    --ink:#1F5D4C;
-    --ink-soft:#e4efe9;
-    --sand:#c9bfa9;
-    --warn:#B3401A;
-    --warn-soft:#faece4;
-    --text:#16202B;
-    --muted:#5c6772;
+    --blue:#1B5FA6;
+    --blue-deep:#123F73;
+    --paper:#FDFBF5;
+    --paper-edge:#E9E2D0;
+    --bg:#EEF0EC;
+    --ink:#1A1A1A;
+    --stamp:#8a1f1f;
+    --muted:#6b6558;
     --line:#dfe4e2;
-    --radius-lg:20px;
+    --warn:#8a3a12;
+    --warn-soft:#f5e9dd;
+    --info-soft:#e6eef6;
+    --info-ink:#26517d;
+    --radius-lg:18px;
     --radius-md:14px;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;background:var(--bg);color:var(--text);
+    margin:0;background:var(--bg);color:var(--ink);
     font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .mono{font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  .serif{font-family:'PT Serif',Georgia,'Times New Roman',serif}
 
   .app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg);
-    display:flex;flex-direction:column;position:relative}
+    display:flex;flex-direction:column}
 
   header{
-    background:var(--navy);color:#fff;
-    padding:calc(env(safe-area-inset-top,0px) + 20px) 20px 26px;
+    background:var(--blue);color:#fff;
+    padding:calc(env(safe-area-inset-top,0px) + 20px) 20px 24px;
     position:sticky;top:0;z-index:5;
-    background-image:
-      radial-gradient(circle at 100% 0%, rgba(255,255,255,.06), transparent 55%),
-      linear-gradient(180deg, var(--navy) 0%, var(--navy) 100%);
-    border-bottom:3px solid var(--ink);
+    border-bottom:3px solid var(--blue-deep);
   }
   .eyebrow{
     display:flex;align-items:center;gap:8px;
-    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.11em;
-    text-transform:uppercase;color:#a9c2d6;margin-bottom:8px;
+    font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+    color:#cfe0f1;margin-bottom:8px;font-weight:600;
   }
-  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px rgba(31,93,76,.35)}
-  h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
-  header .sub{margin-top:4px;font-size:13px;color:#c3d3e0}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.85}
+  h1{margin:0;font-size:25px;font-weight:800;letter-spacing:-.01em;line-height:1.15;
+    font-family:'Inter',sans-serif}
+  header .sub{margin-top:4px;font-size:13px;color:#d7e6f2}
 
   main{padding:16px 16px 40px;flex:1}
 
@@ -74,18 +73,18 @@
     text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
   label .idx{
     display:inline-flex;align-items:center;justify-content:center;
-    width:16px;height:16px;border-radius:4px;background:var(--navy);color:#fff;
-    font-family:'Space Mono',monospace;font-size:10px;font-weight:700;
+    width:16px;height:16px;border-radius:4px;background:var(--blue);color:#fff;
+    font-size:10px;font-weight:700;font-family:'Inter',sans-serif;
   }
 
   .select-wrap{position:relative}
   select{
     width:100%;height:52px;border:1.5px solid var(--line);border-radius:var(--radius-md);
-    padding:0 40px 0 14px;font-size:16px;font-weight:600;background:#fcfdfd;color:var(--text);
-    appearance:none;-webkit-appearance:none;
+    padding:0 40px 0 14px;font-size:16px;font-weight:600;background:#fcfdfd;color:var(--ink);
+    appearance:none;-webkit-appearance:none;font-family:'Inter',sans-serif;
     transition:border-color .15s ease, box-shadow .15s ease;
   }
-  select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(14,48,80,.12)}
+  select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,95,166,.14)}
   .select-wrap::after{
     content:"";position:absolute;right:16px;top:50%;transform:translateY(-65%) rotate(45deg);
     width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);
@@ -96,91 +95,99 @@
   .buttons{display:flex;gap:10px;margin-top:16px}
   button{
     flex:1;border:0;border-radius:var(--radius-md);padding:14px 8px;font-size:14.5px;
-    font-weight:800;letter-spacing:.02em;cursor:pointer;
+    font-weight:800;letter-spacing:.02em;cursor:pointer;font-family:'Inter',sans-serif;
     transition:transform .08s ease, filter .15s ease;
-    font-family:'Inter',sans-serif;
   }
   button:active{transform:scale(.97)}
-  button.main{background:var(--navy);color:#fff}
+  button.main{background:var(--blue);color:#fff}
   button.main:hover{filter:brightness(1.08)}
-  button.ghost{background:#eef2f4;color:var(--navy)}
+  button.ghost{background:#eef2f4;color:var(--blue-deep)}
   button.ghost:hover{background:#e4eaee}
 
-  /* ---- Ticket result ---- */
+  /* ---- Biglietto ---- */
   .ticket{
     position:relative;border-radius:var(--radius-lg);
     background:var(--paper);
-    border:1px solid #ecdfc4;
-    padding:22px 20px 18px;
+    border:1px solid var(--paper-edge);
+    padding:22px 20px 20px;
     overflow:hidden;
-    box-shadow:0 1px 2px rgba(15,35,55,.04), 0 10px 28px -14px rgba(15,35,55,.18);
+    box-shadow:0 1px 2px rgba(15,35,55,.05), 0 14px 32px -16px rgba(15,35,55,.22);
   }
   .ticket::before,.ticket::after{
     content:"";position:absolute;top:50%;transform:translateY(-50%);
-    width:26px;height:26px;border-radius:50%;background:var(--bg);
-    box-shadow:0 0 0 1px #ecdfc4 inset;
+    width:24px;height:24px;border-radius:50%;background:var(--bg);
+    box-shadow:0 0 0 1px var(--paper-edge) inset;
   }
-  .ticket::before{left:-13px}
-  .ticket::after{right:-13px}
+  .ticket::before{left:-12px}
+  .ticket::after{right:-12px}
 
-  .ticket-head{display:flex;justify-content:space-between;align-items:baseline;
-    font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.09em;
-    text-transform:uppercase;color:#8a7f63;margin-bottom:14px}
-
-  .ticket-body{display:flex;align-items:stretch}
-  .ticket-col{flex:1;text-align:center;padding:4px 6px}
-  .ticket-divider{
-    width:0;border-left:2px dashed #d8cba8;margin:0 14px;position:relative;
+  .t-eyebrow{
+    text-align:center;font-size:11px;letter-spacing:.09em;font-weight:700;
+    color:#4a4536;text-transform:uppercase;line-height:1.5;
   }
-  .ticket-divider::before,.ticket-divider::after{
-    content:"";position:absolute;left:50%;transform:translateX(-50%);
-    width:14px;height:14px;border-radius:50%;background:var(--bg);
-    box-shadow:0 0 0 1px #ecdfc4 inset;
+  .t-title{
+    text-align:center;font-size:24px;font-weight:700;margin:6px 0 10px;letter-spacing:.02em;
   }
-  .ticket-divider::before{top:-24px}
-  .ticket-divider::after{bottom:-20px}
-
-  .cap{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#8a7f63;
-    font-weight:700;margin-bottom:6px}
-  .tratta{font-family:'Space Mono',monospace;font-size:52px;font-weight:700;color:var(--navy);
-    line-height:1;margin:2px 0}
-  .price{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;color:var(--ink);
-    line-height:1;margin:2px 0}
-
-  .route{
-    margin-top:16px;padding-top:14px;border-top:1px dashed #d8cba8;
-    display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text);
+  .t-caption{
+    text-align:center;font-size:11.5px;color:var(--muted);margin-bottom:16px;
+    padding-bottom:14px;border-bottom:1px dashed var(--paper-edge);
   }
-  .route .arrow{color:#a3966f;font-size:14px}
+  .t-caption b{color:var(--ink)}
 
-  .fascia-row{margin-top:10px;font-size:12.5px;color:#8a7f63}
-  .fascia-row b{color:var(--text)}
+  .t-body{position:relative;padding:6px 0 4px;min-height:150px}
+
+  .watermark{
+    position:absolute;right:2px;top:50%;transform:translateY(-50%);
+    width:150px;height:auto;opacity:.14;pointer-events:none;
+  }
+
+  .t-row{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;
+    font-size:16px;margin-bottom:6px}
+  .t-row .num{font-weight:700;font-size:19px}
+
+  .t-price-wrap{position:relative;z-index:1;text-align:center;margin:14px 0 12px}
+  .t-price-old{font-size:16px;color:#9a927e;text-decoration:line-through;margin-right:8px}
+  .t-price{font-size:44px;font-weight:700}
+
+  .t-discount{
+    position:relative;z-index:1;text-align:center;font-size:12px;color:var(--blue-deep);
+    background:var(--info-soft);border-radius:8px;padding:6px 10px;margin:0 auto 4px;
+    display:inline-block;font-weight:600;
+  }
+  .t-discount-wrap{text-align:center;margin-bottom:8px}
+
+  .t-route{
+    position:relative;z-index:1;text-align:center;font-size:15px;font-weight:700;
+    margin-top:4px;
+  }
+  .t-route .arrow{color:#9a927e;padding:0 6px;font-weight:400}
+
+  .t-footer{
+    text-align:center;margin-top:16px;padding-top:12px;
+    border-top:1px dashed var(--paper-edge);font-size:11px;color:var(--muted);
+    letter-spacing:.02em;line-height:1.7;
+  }
+  .t-footer span{display:block}
+
+  .placeholder{text-align:center;padding:26px 10px 6px;color:var(--muted)}
+  .placeholder .big{font-size:15px;margin-bottom:4px}
+  .placeholder p{margin:0;font-size:13px;line-height:1.5}
 
   .msg{
-    margin-top:14px;padding:12px 13px;border-radius:11px;font-size:13px;line-height:1.45;
-    display:flex;gap:9px;align-items:flex-start;
+    position:relative;z-index:1;margin-top:12px;padding:11px 13px;border-radius:10px;
+    font-size:12.5px;line-height:1.45;display:flex;gap:8px;align-items:flex-start;
   }
-  .msg.info{background:#eaf1f7;color:#2c516f}
   .msg.warn{background:var(--warn-soft);color:var(--warn)}
   .msg .ico{flex:0 0 auto;margin-top:1px}
 
-  .placeholder{
-    text-align:center;padding:30px 10px 8px;color:var(--muted);
-  }
-  .placeholder .big{font-family:'Space Mono',monospace;font-size:34px;color:#c7cfd4;margin-bottom:6px}
-  .placeholder p{margin:0;font-size:13px}
-
   .urban-note{
     display:flex;align-items:center;justify-content:space-between;
-    background:var(--navy);color:#fff;border-radius:var(--radius-md);
+    background:var(--blue);color:#fff;border-radius:var(--radius-md);
     padding:14px 16px;font-size:13.5px;font-weight:600;
   }
-  .urban-note .price-tag{font-family:'Space Mono',monospace;font-weight:700;font-size:16px;color:#bfe0d1}
+  .urban-note .price-tag{font-weight:800;font-size:16px;color:#cfe0f1}
 
-  footer{
-    text-align:center;padding:6px 20px 28px;font-size:11px;color:var(--muted);
-    line-height:1.6;
-  }
+  footer{text-align:center;padding:6px 20px 28px;font-size:11px;color:var(--muted);line-height:1.6}
 </style>
 </head>
 <body>
@@ -208,9 +215,11 @@
     </section>
 
     <section class="ticket" id="ticket">
-      <div class="ticket-head"><span>Biglietto di corsa</span><span id="ticket-date"></span></div>
-
+      <div class="t-eyebrow">Servizio automobilistico<br>extraurbano</div>
+      <div class="t-title serif">Corsa semplice</div>
+      <div class="t-caption serif">Da convalidare all'inizio del viaggio · <b>vale per una sola corsa</b></div>
       <div id="ticket-content"></div>
+      <div class="t-footer" id="ticket-footer"></div>
     </section>
 
     <section class="urban-note">
@@ -222,8 +231,26 @@
   <footer>App non ufficiale per uso personale · dati desunti dal tariffario STA Iglesias</footer>
 </div>
 
+<svg style="display:none">
+  <symbol id="bus-icon" viewBox="0 0 200 120">
+    <rect x="8" y="18" width="184" height="72" rx="14" fill="none" stroke="#1B5FA6" stroke-width="6"/>
+    <rect x="8" y="18" width="184" height="30" rx="10" fill="none" stroke="#1B5FA6" stroke-width="6"/>
+    <line x1="55" y1="18" x2="55" y2="48" stroke="#1B5FA6" stroke-width="6"/>
+    <line x1="100" y1="18" x2="100" y2="48" stroke="#1B5FA6" stroke-width="6"/>
+    <line x1="145" y1="18" x2="145" y2="48" stroke="#1B5FA6" stroke-width="6"/>
+    <circle cx="48" cy="100" r="14" fill="none" stroke="#1B5FA6" stroke-width="6"/>
+    <circle cx="152" cy="100" r="14" fill="none" stroke="#1B5FA6" stroke-width="6"/>
+    <line x1="8" y1="70" x2="192" y2="70" stroke="#1B5FA6" stroke-width="6"/>
+  </symbol>
+</svg>
+
 <script>
 const STOPS = ["ASSEMINI","BACU ABIS","BAREGA","BINDUA","BUGGERRU (Portixeddu)","CAGLIARI","CALASETTA (Cussorgia)","CARBONIA (Barbusi-Sirai)","CORONGIU (Tani)","CORTOGHIANA","DECIMOMANNU","DOMUSNOVAS","ELMAS","FLUMENTEPIDO","FLUMINIMAGGIORE","GIBA","GONNESA (Funtanamare-Plage Mesu)","GONNOSFANADIGA","GUSPINI","IGLESIAS","IS GANNAUS","MALADROXIA (Coa Quaddu)","MASAINAS","MASUA","MATZACCARA","MONSERRATO","MUSEI","NARCAO (Pesus-Rio Murtas-Terrubia)","NEBIDA","NURAXI FIGUS","NUXIS (Acquacadda)","PARINGIANU (Bruncu Teula)","PERDAXIUS","PISCINAS","PORTOSCUSO","S.ANGELO","S.ANNA ARRESI (Porto Pino)","S.ANTIOCO","S.GIOVANNI SUERGIU (Is Urigus-Palmas)","SANTADI (Terresoli)","SILIQUA","TERRASEO","TEULADA","TRATALIAS","VALLERMOSA","VILLACIDRO","VILLAMASSARGIA (M. Cadelano/ Staz. F.S.)","VILLAPERUCCIO","VILLARIOS","VILLASOR","VILLASPECIOSA"];
+
+// Fermate di partenza da cui NON si applica 1€ della tariffa a bordo rispetto
+// all'importo di tabella (indipendentemente dalla destinazione).
+const EXEMPT_ORIGINS = new Set([12,22,26,33,44,47]); // ELMAS, MASAINAS, MUSEI, PISCINAS, VALLERMOSA, VILLAPERUCCIO
+const DISCOUNT = 1.00;
 
 // Matrice numero-tratta[origine][destinazione]. null = incrocio non leggibile con
 // certezza nella tabella cartacea originale (il codice prova comunque il verso
@@ -234,7 +261,7 @@ const TARIFFS={1:["0–10",2.30],2:["10–20",2.90],3:["20–30",3.50],4:["30–
 
 const F = document.getElementById("from"), A = document.getElementById("to");
 const ticketContent = document.getElementById("ticket-content");
-const ticketDate = document.getElementById("ticket-date");
+const ticketFooter = document.getElementById("ticket-footer");
 
 function fillSelect(sel, selectedIndex){
   sel.innerHTML = STOPS.map((name,i)=>`<option value="${i}">${name}</option>`).join("");
@@ -244,7 +271,7 @@ fillSelect(F, 0);
 fillSelect(A, 1);
 
 function euro(n){
-  return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+  return "€ " + n.toFixed(2).replace(".", ",");
 }
 
 // Cerca il valore in entrambi i versi prima di arrendersi: se la cella A→B non è
@@ -258,73 +285,72 @@ function resolveTratta(i,j){
   return {value:null, inferred:false};
 }
 
-function renderPlaceholder(text){
-  ticketContent.innerHTML = `
-    <div class="placeholder">
-      <div class="big">— · —</div>
-      <p>${text}</p>
-    </div>`;
+function serial(i,j){
+  let n = String(1000*i + j);
+  while(n.length < 6) n = "0" + n;
+  return "AT" + n;
 }
 
-function renderSame(){
-  renderPlaceholder("Partenza e arrivo coincidono: scegli due fermate diverse per calcolare la tratta.");
+function pad2(n){ return n < 10 ? "0" + n : String(n); }
+function todayStr(){
+  const d = new Date();
+  return pad2(d.getDate()) + "/" + pad2(d.getMonth()+1) + "/" + d.getFullYear();
+}
+
+function renderPlaceholder(text){
+  ticketContent.innerHTML = `<div class="placeholder"><p>${text}</p></div>`;
+  ticketFooter.innerHTML = "";
 }
 
 function renderUnreadable(routeLabel){
   ticketContent.innerHTML = `
-    <div class="ticket-body">
-      <div class="ticket-col">
-        <div class="cap">Numero tratta</div>
-        <div class="tratta mono" style="font-size:30px">Verificare</div>
-      </div>
-      <div class="ticket-divider"></div>
-      <div class="ticket-col">
-        <div class="cap">Tariffa</div>
-        <div class="price mono">—</div>
-      </div>
-    </div>
-    <div class="route"><span>${routeLabel[0]}</span><span class="arrow">→</span><span>${routeLabel[1]}</span></div>
+    <div class="t-route serif">${routeLabel[0]}<span class="arrow">→</span>${routeLabel[1]}</div>
     <div class="msg warn"><span class="ico">⚠️</span><span>Questo incrocio non è leggibile con certezza nella tabella originale, in nessuna delle due direzioni. Verifica la tariffa a bordo con l'operatore.</span></div>
   `;
+  ticketFooter.innerHTML = "";
 }
 
-function renderResult(x, inferred, routeLabel){
+function renderResult(x, inferred, i, j, routeLabel){
   const z = TARIFFS[x];
+  const base = z ? z[1] : null;
+  const exempt = EXEMPT_ORIGINS.has(i);
+  const finalPrice = (base != null && exempt) ? Math.max(base - DISCOUNT, 0) : base;
+
   ticketContent.innerHTML = `
-    <div class="ticket-body">
-      <div class="ticket-col">
-        <div class="cap">Numero tratta</div>
-        <div class="tratta mono">${x}</div>
+    <div class="t-body">
+      <svg class="watermark" viewBox="0 0 200 120"><use href="#bus-icon"/></svg>
+      <div class="t-row serif"><span>Tratta Tariffaria</span><span class="num">${x}</span></div>
+      <div class="t-price-wrap serif">
+        ${exempt && base != null ? `<span class="t-price-old">${euro(base)}</span>` : ""}
+        <span class="t-price">${finalPrice != null ? euro(finalPrice) : "—"}</span>
       </div>
-      <div class="ticket-divider"></div>
-      <div class="ticket-col">
-        <div class="cap">Tariffa a bordo</div>
-        <div class="price mono">${z ? euro(z[1]) : "—"}</div>
-      </div>
+      ${exempt ? `<div class="t-discount-wrap"><span class="t-discount">− ${euro(DISCOUNT)} · nessuna sovrattassa da ${routeLabel[0]}</span></div>` : ""}
+      <div class="t-route serif">${routeLabel[0]}<span class="arrow">→</span>${routeLabel[1]}</div>
+      ${inferred ? `<div class="msg warn" style="background:var(--info-soft);color:var(--info-ink)"><span class="ico">ℹ️</span><span>Tratta dedotta dal verso opposto (${routeLabel[1]} → ${routeLabel[0]}), non leggibile direttamente in tabella per questo verso.</span></div>` : ""}
     </div>
-    <div class="route"><span>${routeLabel[0]}</span><span class="arrow">→</span><span>${routeLabel[1]}</span></div>
-    <div class="fascia-row">Fascia chilometrica: <b>${z ? z[0]+" km" : "—"}</b></div>
-    ${inferred ? `<div class="msg info"><span class="ico">ℹ️</span><span>Tratta dedotta dal verso opposto (${routeLabel[1]} → ${routeLabel[0]}), non leggibile direttamente in tabella per questo verso.</span></div>` : ""}
   `;
+  ticketFooter.innerHTML = `<span>N. ${serial(i,j)}</span><span>${todayStr()}</span>`;
 }
 
 function calc(){
   const i = Number(F.value), j = Number(A.value);
   const routeLabel = [STOPS[i], STOPS[j]];
 
-  if(i === j){ renderSame(); return; }
+  if(i === j){
+    renderPlaceholder("Partenza e arrivo coincidono: scegli due fermate diverse per calcolare la tratta.");
+    return;
+  }
 
   const {value, inferred} = resolveTratta(i,j);
   if(value == null){ renderUnreadable(routeLabel); return; }
 
-  renderResult(value, inferred, routeLabel);
+  renderResult(value, inferred, i, j, routeLabel);
 }
 
 document.getElementById("calc").onclick = calc;
 document.getElementById("swap").onclick = () => { const x = F.value; F.value = A.value; A.value = x; calc(); };
 F.onchange = calc; A.onchange = calc;
 
-ticketDate.textContent = new Date().toLocaleDateString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric"});
 calc();
 </script>
 <script>
