@@ -1,41 +1,336 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#123f63"><title>STA Iglesias - Calcolo Tratte</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tratte STA">
+<meta name="theme-color" content="#0E3050">
+<meta name="description" content="Calcolo rapido di numero tratta e tariffa a bordo per la rete STA Iglesias.">
+<title>STA Iglesias · Calcolo Tratta</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef2f5;color:#18222c;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-.app{max-width:680px;margin:auto;min-height:100vh;background:#f7f9fb}header{background:#123f63;color:#fff;padding:22px 16px 18px;position:sticky;top:0;z-index:2}
-header small{opacity:.82}h1{margin:5px 0 0;font-size:25px}main{padding:14px}.card{background:#fff;border-radius:18px;padding:17px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.07)}
-label{display:block;font-weight:800;font-size:14px;margin-bottom:7px}select{width:100%;height:52px;border:1px solid #cbd5df;border-radius:12px;padding:0 10px;font-size:16px;background:#fff}
-.field{margin-top:14px}.buttons{display:flex;gap:9px;margin-top:14px}button{flex:1;border:0;border-radius:12px;padding:13px 8px;font-size:15px;font-weight:800;background:#e7edf2;color:#123f63}button.main{background:#123f63;color:#fff}
-.result{background:#e8f3e7;border-radius:18px;text-align:center;padding:20px 14px}.cap{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#52605a}
-.tratta{font-size:50px;font-weight:900;color:#123f63;line-height:1.05;margin:4px 0 13px}.price{font-size:38px;font-weight:900;color:#123f63;margin:4px 0 14px}
-.details{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detail{background:#fff;border-radius:11px;padding:10px}.detail span{display:block;font-size:12px;color:#66737d}.detail strong{font-size:15px}
-.note{margin-top:12px;padding:11px;border-radius:11px;background:#edf4f9;font-size:12px;line-height:1.4}
-.warn{background:#fff0e7;color:#7b421f}
-</style><link rel="manifest" href="./manifest.webmanifest">
-</head><body><div class="app"><header><small>STA IGLESIAS — AGE08 · Aggiornamento 03/08/2023</small><h1>Calcolo tratta</h1></header>
-<main><section class="card"><label for="from">Partenza</label><select id="from"><option value="0">ASSEMINI</option><option value="1">BACU ABIS</option><option value="2">BAREGA</option><option value="3">BINDUA</option><option value="4">BUGGERRU (Portixeddu)</option><option value="5">CAGLIARI</option><option value="6">CALASETTA (Cussorgia)</option><option value="7">CARBONIA (Barbusi-Sirai)</option><option value="8">CORONGIU (Tani)</option><option value="9">CORTOGHIANA</option><option value="10">DECIMOMANNU</option><option value="11">DOMUSNOVAS</option><option value="12">ELMAS</option><option value="13">FLUMENTEPIDO</option><option value="14">FLUMINIMAGGIORE</option><option value="15">GIBA</option><option value="16">GONNESA (Funtanamare-Plage Mesu)</option><option value="17">GONNOSFANADIGA</option><option value="18">GUSPINI</option><option value="19">IGLESIAS</option><option value="20">IS GANNAUS</option><option value="21">MALADROXIA (Coa Quaddu)</option><option value="22">MASAINAS</option><option value="23">MASUA</option><option value="24">MATZACCARA</option><option value="25">MONSERRATO</option><option value="26">MUSEI</option><option value="27">NARCAO (Pesus-Rio Murtas-Terrubia)</option><option value="28">NEBIDA</option><option value="29">NURAXI FIGUS</option><option value="30">NUXIS (Acquacadda)</option><option value="31">PARINGIANU (Bruncu Teula)</option><option value="32">PERDAXIUS</option><option value="33">PISCINAS</option><option value="34">PORTOSCUSO</option><option value="35">S.ANGELO</option><option value="36">S.ANNA ARRESI (Porto Pino)</option><option value="37">S.ANTIOCO</option><option value="38">S.GIOVANNI SUERGIU (Is Urigus-Palmas)</option><option value="39">SANTADI (Terresoli)</option><option value="40">SILIQUA</option><option value="41">TERRASEO</option><option value="42">TEULADA</option><option value="43">TRATALIAS</option><option value="44">VALLERMOSA</option><option value="45">VILLACIDRO</option><option value="46">VILLAMASSARGIA (M. Cadelano/ Staz. F.S.)</option><option value="47">VILLAPERUCCIO</option><option value="48">VILLARIOS</option><option value="49">VILLASOR</option><option value="50">VILLASPECIOSA</option></select>
-<div class="field"><label for="to">Arrivo</label><select id="to"><option value="0">ASSEMINI</option><option value="1">BACU ABIS</option><option value="2">BAREGA</option><option value="3">BINDUA</option><option value="4">BUGGERRU (Portixeddu)</option><option value="5">CAGLIARI</option><option value="6">CALASETTA (Cussorgia)</option><option value="7">CARBONIA (Barbusi-Sirai)</option><option value="8">CORONGIU (Tani)</option><option value="9">CORTOGHIANA</option><option value="10">DECIMOMANNU</option><option value="11">DOMUSNOVAS</option><option value="12">ELMAS</option><option value="13">FLUMENTEPIDO</option><option value="14">FLUMINIMAGGIORE</option><option value="15">GIBA</option><option value="16">GONNESA (Funtanamare-Plage Mesu)</option><option value="17">GONNOSFANADIGA</option><option value="18">GUSPINI</option><option value="19">IGLESIAS</option><option value="20">IS GANNAUS</option><option value="21">MALADROXIA (Coa Quaddu)</option><option value="22">MASAINAS</option><option value="23">MASUA</option><option value="24">MATZACCARA</option><option value="25">MONSERRATO</option><option value="26">MUSEI</option><option value="27">NARCAO (Pesus-Rio Murtas-Terrubia)</option><option value="28">NEBIDA</option><option value="29">NURAXI FIGUS</option><option value="30">NUXIS (Acquacadda)</option><option value="31">PARINGIANU (Bruncu Teula)</option><option value="32">PERDAXIUS</option><option value="33">PISCINAS</option><option value="34">PORTOSCUSO</option><option value="35">S.ANGELO</option><option value="36">S.ANNA ARRESI (Porto Pino)</option><option value="37">S.ANTIOCO</option><option value="38">S.GIOVANNI SUERGIU (Is Urigus-Palmas)</option><option value="39">SANTADI (Terresoli)</option><option value="40">SILIQUA</option><option value="41">TERRASEO</option><option value="42">TEULADA</option><option value="43">TRATALIAS</option><option value="44">VALLERMOSA</option><option value="45">VILLACIDRO</option><option value="46">VILLAMASSARGIA (M. Cadelano/ Staz. F.S.)</option><option value="47">VILLAPERUCCIO</option><option value="48">VILLARIOS</option><option value="49">VILLASOR</option><option value="50">VILLASPECIOSA</option></select></div>
-<div class="buttons"><button class="main" id="calc">CALCOLA TRATTA</button><button id="swap">↕ INVERTI</button></div></section>
-<section class="result"><div class="cap">Numero di tratta</div><div class="tratta" id="tratta">—</div>
-<div class="cap">Tariffa a bordo</div><div class="price" id="price">—</div>
-<div class="details"><div class="detail"><span>Fascia km</span><strong id="fascia">—</strong></div><div class="detail"><span>Percorso</span><strong id="route">—</strong></div></div>
-<div class="note" id="warn" style="display:none"></div></section>
-<section class="card"><div class="note" style="margin-top:0"><b>Tariffa urbana:</b> € 1,50.</div></section></main></div>
+  :root{
+    --navy:#0E3050;
+    --navy-deep:#092136;
+    --paper:#FBF7EF;
+    --bg:#EEF1F0;
+    --ink:#1F5D4C;
+    --ink-soft:#e4efe9;
+    --sand:#c9bfa9;
+    --warn:#B3401A;
+    --warn-soft:#faece4;
+    --text:#16202B;
+    --muted:#5c6772;
+    --line:#dfe4e2;
+    --radius-lg:20px;
+    --radius-md:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  .app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg);
+    display:flex;flex-direction:column;position:relative}
+
+  header{
+    background:var(--navy);color:#fff;
+    padding:calc(env(safe-area-inset-top,0px) + 20px) 20px 26px;
+    position:sticky;top:0;z-index:5;
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba(255,255,255,.06), transparent 55%),
+      linear-gradient(180deg, var(--navy) 0%, var(--navy) 100%);
+    border-bottom:3px solid var(--ink);
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:8px;
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.11em;
+    text-transform:uppercase;color:#a9c2d6;margin-bottom:8px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px rgba(31,93,76,.35)}
+  h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+  header .sub{margin-top:4px;font-size:13px;color:#c3d3e0}
+
+  main{padding:16px 16px 40px;flex:1}
+
+  .card{
+    background:#fff;border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(15,35,55,.04), 0 8px 24px -12px rgba(15,35,55,.12);
+    border:1px solid var(--line);
+  }
+
+  label{display:flex;align-items:center;gap:7px;font-weight:700;font-size:12.5px;
+    text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+  label .idx{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:16px;height:16px;border-radius:4px;background:var(--navy);color:#fff;
+    font-family:'Space Mono',monospace;font-size:10px;font-weight:700;
+  }
+
+  .select-wrap{position:relative}
+  select{
+    width:100%;height:52px;border:1.5px solid var(--line);border-radius:var(--radius-md);
+    padding:0 40px 0 14px;font-size:16px;font-weight:600;background:#fcfdfd;color:var(--text);
+    appearance:none;-webkit-appearance:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(14,48,80,.12)}
+  .select-wrap::after{
+    content:"";position:absolute;right:16px;top:50%;transform:translateY(-65%) rotate(45deg);
+    width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);
+    pointer-events:none;
+  }
+  .field{margin-top:14px}
+
+  .buttons{display:flex;gap:10px;margin-top:16px}
+  button{
+    flex:1;border:0;border-radius:var(--radius-md);padding:14px 8px;font-size:14.5px;
+    font-weight:800;letter-spacing:.02em;cursor:pointer;
+    transition:transform .08s ease, filter .15s ease;
+    font-family:'Inter',sans-serif;
+  }
+  button:active{transform:scale(.97)}
+  button.main{background:var(--navy);color:#fff}
+  button.main:hover{filter:brightness(1.08)}
+  button.ghost{background:#eef2f4;color:var(--navy)}
+  button.ghost:hover{background:#e4eaee}
+
+  /* ---- Ticket result ---- */
+  .ticket{
+    position:relative;border-radius:var(--radius-lg);
+    background:var(--paper);
+    border:1px solid #ecdfc4;
+    padding:22px 20px 18px;
+    overflow:hidden;
+    box-shadow:0 1px 2px rgba(15,35,55,.04), 0 10px 28px -14px rgba(15,35,55,.18);
+  }
+  .ticket::before,.ticket::after{
+    content:"";position:absolute;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;background:var(--bg);
+    box-shadow:0 0 0 1px #ecdfc4 inset;
+  }
+  .ticket::before{left:-13px}
+  .ticket::after{right:-13px}
+
+  .ticket-head{display:flex;justify-content:space-between;align-items:baseline;
+    font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.09em;
+    text-transform:uppercase;color:#8a7f63;margin-bottom:14px}
+
+  .ticket-body{display:flex;align-items:stretch}
+  .ticket-col{flex:1;text-align:center;padding:4px 6px}
+  .ticket-divider{
+    width:0;border-left:2px dashed #d8cba8;margin:0 14px;position:relative;
+  }
+  .ticket-divider::before,.ticket-divider::after{
+    content:"";position:absolute;left:50%;transform:translateX(-50%);
+    width:14px;height:14px;border-radius:50%;background:var(--bg);
+    box-shadow:0 0 0 1px #ecdfc4 inset;
+  }
+  .ticket-divider::before{top:-24px}
+  .ticket-divider::after{bottom:-20px}
+
+  .cap{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#8a7f63;
+    font-weight:700;margin-bottom:6px}
+  .tratta{font-family:'Space Mono',monospace;font-size:52px;font-weight:700;color:var(--navy);
+    line-height:1;margin:2px 0}
+  .price{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;color:var(--ink);
+    line-height:1;margin:2px 0}
+
+  .route{
+    margin-top:16px;padding-top:14px;border-top:1px dashed #d8cba8;
+    display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--text);
+  }
+  .route .arrow{color:#a3966f;font-size:14px}
+
+  .fascia-row{margin-top:10px;font-size:12.5px;color:#8a7f63}
+  .fascia-row b{color:var(--text)}
+
+  .msg{
+    margin-top:14px;padding:12px 13px;border-radius:11px;font-size:13px;line-height:1.45;
+    display:flex;gap:9px;align-items:flex-start;
+  }
+  .msg.info{background:#eaf1f7;color:#2c516f}
+  .msg.warn{background:var(--warn-soft);color:var(--warn)}
+  .msg .ico{flex:0 0 auto;margin-top:1px}
+
+  .placeholder{
+    text-align:center;padding:30px 10px 8px;color:var(--muted);
+  }
+  .placeholder .big{font-family:'Space Mono',monospace;font-size:34px;color:#c7cfd4;margin-bottom:6px}
+  .placeholder p{margin:0;font-size:13px}
+
+  .urban-note{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--navy);color:#fff;border-radius:var(--radius-md);
+    padding:14px 16px;font-size:13.5px;font-weight:600;
+  }
+  .urban-note .price-tag{font-family:'Space Mono',monospace;font-weight:700;font-size:16px;color:#bfe0d1}
+
+  footer{
+    text-align:center;padding:6px 20px 28px;font-size:11px;color:var(--muted);
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="eyebrow"><span class="dot"></span>STA IGLESIAS · AGE08 · AGG. 03/08/2023</div>
+    <h1>Calcolo tratta</h1>
+    <div class="sub">Seleziona partenza e arrivo per la tariffa a bordo</div>
+  </header>
+
+  <main>
+    <section class="card">
+      <label for="from"><span class="idx">A</span>Partenza</label>
+      <div class="select-wrap"><select id="from"></select></div>
+
+      <div class="field">
+        <label for="to"><span class="idx">B</span>Arrivo</label>
+        <div class="select-wrap"><select id="to"></select></div>
+      </div>
+
+      <div class="buttons">
+        <button class="main" id="calc">Calcola tratta</button>
+        <button class="ghost" id="swap">↕ Inverti</button>
+      </div>
+    </section>
+
+    <section class="ticket" id="ticket">
+      <div class="ticket-head"><span>Biglietto di corsa</span><span id="ticket-date"></span></div>
+
+      <div id="ticket-content"></div>
+    </section>
+
+    <section class="urban-note">
+      <span>Tariffa urbana</span>
+      <span class="price-tag">€ 1,50</span>
+    </section>
+  </main>
+
+  <footer>App non ufficiale per uso personale · dati desunti dal tariffario STA Iglesias</footer>
+</div>
+
 <script>
-const MATRIX=[[null,6,5,5,8,2,9,6,5,7,1,4,1,6,7,6,6,5,6,5,7,9,7,7,7,2,4,6,6,7,5,7,6,6,7,6,7,8,7,6,3,6,7,7,3,4,4,6,7,2,2],[6,null,3,1,4,7,4,2,2,1,6,3,7,1,4,3,1,7,8,2,2,4,4,2,2,8,3,3,2,1,5,2,3,4,2,3,4,3,2,4,4,3,6,3,5,6,3,4,3,6,5],[5,3,null,2,5,7,5,2,1,2,5,2,6,2,4,4,2,6,7,1,2,4,4,3,3,7,2,4,3,2,6,2,3,4,3,2,5,4,3,5,3,4,6,3,4,5,2,5,4,5,5],[5,1,2,null,3,7,5,2,2,2,5,2,5,2,3,4,1,6,7,1,3,4,4,2,3,7,2,4,2,2,6,2,4,4,2,2,5,4,3,5,3,4,6,4,4,6,2,5,4,5,5],[8,4,5,3,null,9,7,5,5,4,8,5,9,4,2,6,3,5,4,4,5,7,7,2,5,10,5,6,2,4,8,5,6,7,5,3,7,6,5,7,6,6,9,6,7,6,5,7,6,7,7],[2,7,7,7,9,null,10,8,6,8,2,5,1,7,9,7,7,6,7,6,8,10,9,8,8,1,5,7,8,8,5,8,7,7,8,7,8,9,8,6,4,7,7,8,4,5,6,7,7,3,3],[9,4,5,5,7,10,null,3,4,4,8,6,9,3,8,4,4,10,11,5,3,2,4,5,3,10,5,4,5,4,5,3,4,4,4,7,5,1,2,5,7,5,6,3,8,9,5,5,4,9,8],[6,2,2,2,5,8,3,null,2,1,6,3,7,1,5,3,2,7,8,3,1,3,3,3,2,8,3,2,3,2,3,2,2,3,2,4,3,2,1,3,4,2,5,2,5,7,3,3,2,7,6],[5,2,1,2,5,6,4,2,null,2,5,2,6,2,4,4,3,6,7,2,2,4,4,4,2,7,2,4,3,2,5,2,3,4,3,3,4,3,2,5,3,4,6,3,4,5,1,5,3,5,4],[7,1,2,2,4,8,4,1,2,null,6,3,7,1,5,3,1,8,8,2,1,3,3,2,2,8,3,3,2,1,5,1,3,3,2,3,4,3,2,4,5,3,5,3,5,7,3,4,3,7,6],[1,6,5,5,8,2,8,6,5,6,null,3,2,6,7,6,5,4,5,4,6,8,6,6,6,3,3,5,6,6,4,6,5,5,7,6,6,7,6,5,2,6,9,6,2,3,4,5,6,1,1],[4,3,2,2,5,5,6,3,2,3,3,null,4,3,4,5,2,5,6,2,3,5,5,3,4,5,1,5,3,3,4,4,4,5,4,3,6,5,4,5,2,5,7,4,3,4,1,5,5,4,3],[1,7,6,5,9,1,9,7,6,7,2,4,null,7,8,7,6,5,6,5,7,9,7,7,7,2,4,6,7,7,5,7,7,6,8,7,8,8,7,6,3,7,8,7,3,5,5,6,7,2,2],[6,1,2,2,4,7,3,1,2,1,6,3,7,null,5,3,1,7,8,2,1,3,3,3,1,8,3,3,2,1,4,1,2,3,2,4,4,2,2,4,4,3,5,2,5,6,2,4,3,6,5],[7,4,4,3,2,9,8,5,4,5,7,4,8,5,null,7,4,4,3,3,5,7,7,4,6,9,4,7,4,5,8,5,6,7,5,2,8,7,6,8,5,7,9,7,6,5,4,8,7,6,7],[6,3,4,4,6,7,4,3,4,3,6,5,7,3,7,null,4,7,8,5,2,3,1,5,3,8,5,2,5,3,2,3,2,1,4,6,1,3,2,1,4,3,3,1,5,6,4,1,1,6,6],[6,1,2,1,3,7,4,2,3,1,5,2,6,1,4,4,null,7,7,1,2,4,4,2,2,7,3,4,1,1,5,2,3,4,2,3,5,3,2,5,4,4,6,3,4,6,2,5,4,6,5],[5,7,6,6,5,6,10,7,6,8,4,5,5,7,4,7,7,null,1,6,8,10,8,8,8,7,5,6,7,8,6,8,7,7,8,5,8,9,8,7,4,7,9,8,3,2,5,7,8,3,4],[6,8,7,7,4,7,11,8,7,8,5,6,6,8,3,8,7,1,null,7,8,10,8,6,9,8,6,7,8,8,7,8,8,8,9,5,9,10,9,8,4,8,10,8,4,2,6,7,8,4,5],[5,2,1,1,4,6,5,3,2,2,4,2,5,2,3,5,1,6,7,null,3,5,5,2,3,6,2,5,2,2,5,3,4,5,3,2,6,4,3,6,3,5,7,4,3,5,2,6,5,5,4],[7,2,2,3,5,8,3,1,2,1,6,3,7,1,5,2,2,8,8,3,null,3,3,3,1,8,3,2,3,2,4,2,2,3,2,4,3,2,1,3,5,2,5,2,5,7,3,3,2,7,6],[9,4,4,4,7,10,2,3,4,3,8,5,9,3,7,3,4,10,10,5,3,null,4,5,2,10,5,4,5,4,5,3,4,4,4,6,4,1,2,4,7,4,6,3,7,9,5,4,3,9,8],[7,4,4,4,7,9,4,3,4,3,6,5,7,3,7,1,4,8,8,5,3,4,null,5,3,8,5,2,5,4,2,3,2,1,4,6,1,3,2,2,4,3,2,2,5,7,5,2,1,7,6],[7,2,3,2,2,8,5,3,4,2,6,3,7,3,4,5,2,8,6,2,3,5,5,null,3,8,3,5,1,2,6,3,4,5,3,3,6,4,4,6,5,5,7,4,5,7,3,6,5,7,6],[7,2,3,3,5,8,3,2,2,2,6,4,7,1,6,3,2,8,9,3,1,2,3,3,null,8,4,3,3,2,4,1,3,3,2,4,3,2,1,4,5,3,5,2,6,7,3,3,2,7,6],[2,8,7,7,10,1,10,8,7,8,3,5,2,8,9,8,7,7,8,6,8,10,8,8,8,null,5,7,8,8,6,8,7,7,9,8,9,9,8,7,4,8,8,8,4,6,6,7,8,3,3],[4,3,2,2,5,5,5,3,2,3,3,1,4,3,4,5,3,5,6,2,3,5,5,3,4,5,null,5,3,3,4,3,4,5,4,3,6,4,4,5,2,5,7,4,3,4,1,5,5,4,3],[6,3,4,4,6,7,4,2,4,3,5,5,6,3,7,2,4,6,7,5,2,4,2,5,3,7,5,null,5,3,2,3,1,2,4,6,3,3,2,2,3,11,4,2,4,6,4,1,2,6,5],[6,2,3,2,2,8,5,3,3,2,6,3,7,2,4,5,1,7,8,2,3,5,5,1,3,8,3,5,null,2,6,3,4,5,3,3,5,4,3,6,4,5,7,4,5,7,3,5,4,7,6],[7,1,2,2,4,8,4,2,2,1,6,3,7,1,5,3,1,8,8,2,2,4,4,2,2,8,3,3,2,null,5,2,3,4,1,3,4,3,2,4,5,3,6,3,5,7,3,4,3,7,6],[5,5,6,6,8,5,5,3,5,5,4,4,5,4,8,2,5,6,7,5,4,5,2,6,4,6,4,2,6,5,null,4,2,2,5,6,3,4,3,2,3,2,4,3,3,5,4,1,2,5,4],[7,2,2,2,5,8,3,2,2,1,6,4,7,1,5,3,2,8,8,3,2,3,3,3,1,8,3,3,3,2,4,null,3,3,1,4,4,2,2,4,5,3,5,2,5,7,3,4,3,7,6],[6,3,3,4,6,7,4,2,3,3,5,4,7,2,6,2,3,7,8,4,2,4,2,4,3,7,4,1,4,3,2,3,null,3,3,5,3,3,2,2,4,1,4,1,5,6,4,1,2,6,5],[6,4,4,4,7,7,4,3,4,3,5,5,6,3,7,1,4,7,8,5,3,4,1,5,3,7,5,2,5,4,2,3,3,null,4,6,2,3,2,1,4,3,3,2,5,6,5,1,1,6,5],[7,2,3,2,5,8,4,2,3,2,7,4,8,2,5,4,2,8,9,3,2,4,4,3,2,9,4,4,3,1,5,1,3,4,null,4,4,6,5,5,5,4,6,3,6,7,4,5,3,7,6],[6,3,2,2,3,7,7,4,3,3,6,3,7,4,2,6,3,5,5,2,4,6,6,3,4,8,3,6,3,3,6,4,5,6,4,null,7,3,2,7,4,6,8,5,5,6,3,7,6,6,5],[7,4,5,5,7,8,5,3,4,4,6,6,8,4,8,1,5,8,9,6,3,4,1,6,3,9,6,3,5,4,3,4,3,2,4,7,null,3,1,2,5,4,2,2,6,7,5,2,2,7,6],[8,3,4,4,6,9,1,2,3,3,7,5,8,2,7,3,3,9,10,4,2,1,3,4,2,9,4,3,4,3,4,2,3,3,6,3,3,null,null,3,6,4,5,2,6,8,4,3,2,8,7],[7,2,3,3,5,8,2,1,2,2,6,4,7,2,6,2,2,8,9,3,1,2,2,4,1,8,4,2,3,2,3,2,2,2,5,2,1,1,null,3,5,3,4,1,6,7,3,3,2,7,6],[6,4,5,5,7,6,5,3,5,4,5,5,6,4,8,1,5,7,8,6,3,4,2,6,4,7,5,2,6,4,2,4,2,1,5,7,2,3,3,null,4,2,3,2,4,6,5,1,2,6,5],[3,4,3,3,6,4,7,4,3,5,2,2,3,4,5,4,4,4,4,3,5,7,4,5,5,4,2,3,4,5,3,5,4,4,5,4,5,6,5,4,null,4,6,5,1,3,2,4,5,3,2],[6,3,4,4,6,7,5,2,4,3,6,5,7,3,7,3,4,7,8,5,2,4,3,5,3,8,5,11,5,3,2,3,1,3,4,6,4,4,3,2,4,null,5,2,5,6,4,2,3,6,5],[7,6,6,6,9,7,6,5,6,5,9,7,8,5,9,3,6,9,10,7,5,6,2,7,5,8,7,4,7,6,4,5,4,3,6,8,2,5,4,3,6,5,null,4,7,9,7,4,3,10,9],[7,3,3,4,6,8,3,2,3,3,6,4,7,2,7,1,3,8,8,4,2,3,2,4,2,8,4,2,4,3,3,2,1,2,3,5,2,2,1,2,5,2,4,null,5,7,4,2,1,7,6],[3,5,4,4,7,4,8,5,4,5,2,3,3,5,6,5,4,3,4,3,5,7,5,5,6,4,3,4,5,5,3,5,5,5,6,5,6,6,6,4,1,5,7,5,null,2,3,4,5,2,2],[4,6,5,6,6,5,9,7,5,7,3,4,5,6,5,6,6,2,2,5,7,9,7,7,7,6,4,6,7,7,5,7,6,6,7,6,7,8,7,6,3,6,9,7,2,null,5,6,7,3,4],[4,3,2,2,5,6,5,3,1,3,4,1,5,2,4,4,2,5,6,2,3,5,5,3,3,6,1,4,3,3,4,3,4,5,4,3,5,4,3,5,2,4,7,4,3,5,null,5,4,4,4],[6,4,5,5,7,7,5,3,5,4,5,5,6,4,8,1,5,7,7,6,3,4,2,6,3,7,5,1,5,4,1,4,1,1,5,7,2,3,3,1,4,2,4,2,4,6,5,null,2,6,5],[7,3,4,4,6,7,4,2,3,3,6,5,7,3,7,1,4,8,8,5,2,3,1,5,2,8,5,2,4,3,2,3,2,1,3,6,2,2,2,2,5,3,3,1,5,7,4,2,null,7,6],[2,6,5,5,7,3,9,7,5,7,1,4,2,6,6,6,6,3,4,5,7,9,7,7,7,3,4,6,7,7,5,7,6,6,7,6,7,8,7,6,3,6,10,7,2,3,4,6,7,null,2],[2,5,5,5,7,3,8,6,4,6,1,3,2,5,7,6,5,4,5,4,6,8,6,6,6,3,3,5,6,6,4,6,5,5,6,5,6,7,6,5,2,5,9,6,2,4,4,5,6,2,null]],TARIFFS={"1":["0–10",2.3],"2":["10–20",2.9],"3":["20–30",3.5],"4":["30–40",4.1],"5":["40–50",4.7],"6":["50–60",5.3],"7":["60–70",5.9],"8":["70–80",6.5],"9":["80–90",7.1],"10":["90–100",7.7],"11":["100–125",9.1],"12":["125–150",10.5],"13":["150–175",12.0],"14":["175–200",13.5],"15":["200–225",15.0],"16":["225–250",16.5],"17":["250–275",17.5],"18":["275–300",19.0],"19":["300–325",20.5],"20":["325–350",22.0]};const F=document.getElementById("from"),A=document.getElementById("to");
-const tratta=document.getElementById("tratta"),price=document.getElementById("price"),fascia=document.getElementById("fascia"),route=document.getElementById("route"),warn=document.getElementById("warn");
-function euro(n){return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2}).format(n)}
-function calc(){const i=Number(F.value),j=Number(A.value),x=MATRIX[i][j];route.textContent=F.options[F.selectedIndex].text+" → "+A.options[A.selectedIndex].text;warn.style.display="none";
-if(i===j){tratta.textContent="—";price.textContent="—";fascia.textContent="—";return}
-if(x==null){tratta.textContent="VERIFICARE";price.textContent="—";fascia.textContent="—";warn.textContent="Incrocio non leggibile con certezza nella tabella originale.";warn.style.display="block";return}
-const z=TARIFFS[String(x)];tratta.textContent=x;fascia.textContent=z?z[0]+" km":"—";
-const ridotte=["ELMAS","MASAINAS","MUSEI","PISCINAS","VALLERMOSA","VILLAPERUCCIO"];
-const partenza=F.options[F.selectedIndex].text;
-const tariffa=z?(ridotte.includes(partenza)?Math.max(0,z[1]-1):z[1]):null;
-price.textContent=tariffa!=null?euro(tariffa):"—";
-if(z && ridotte.includes(partenza)){warn.textContent="Tariffa a bordo ridotta di € 1,00 per partenza da "+partenza+".";warn.style.display="block";}}
-document.getElementById("calc").onclick=calc;document.getElementById("swap").onclick=()=>{let x=F.value;F.value=A.value;A.value=x;calc()};F.onchange=calc;A.onchange=calc;calc();
-</script><script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js"));}</script>
-</body></html>
+const STOPS = ["ASSEMINI","BACU ABIS","BAREGA","BINDUA","BUGGERRU (Portixeddu)","CAGLIARI","CALASETTA (Cussorgia)","CARBONIA (Barbusi-Sirai)","CORONGIU (Tani)","CORTOGHIANA","DECIMOMANNU","DOMUSNOVAS","ELMAS","FLUMENTEPIDO","FLUMINIMAGGIORE","GIBA","GONNESA (Funtanamare-Plage Mesu)","GONNOSFANADIGA","GUSPINI","IGLESIAS","IS GANNAUS","MALADROXIA (Coa Quaddu)","MASAINAS","MASUA","MATZACCARA","MONSERRATO","MUSEI","NARCAO (Pesus-Rio Murtas-Terrubia)","NEBIDA","NURAXI FIGUS","NUXIS (Acquacadda)","PARINGIANU (Bruncu Teula)","PERDAXIUS","PISCINAS","PORTOSCUSO","S.ANGELO","S.ANNA ARRESI (Porto Pino)","S.ANTIOCO","S.GIOVANNI SUERGIU (Is Urigus-Palmas)","SANTADI (Terresoli)","SILIQUA","TERRASEO","TEULADA","TRATALIAS","VALLERMOSA","VILLACIDRO","VILLAMASSARGIA (M. Cadelano/ Staz. F.S.)","VILLAPERUCCIO","VILLARIOS","VILLASOR","VILLASPECIOSA"];
+
+// Matrice numero-tratta[origine][destinazione]. null = incrocio non leggibile con
+// certezza nella tabella cartacea originale (il codice prova comunque il verso
+// opposto prima di arrendersi: vedi resolveTratta()).
+const MATRIX=[[null,6,5,5,8,2,9,6,5,7,1,4,1,6,7,6,6,5,6,5,7,9,7,7,7,2,4,6,6,7,5,7,6,6,7,6,7,8,7,6,3,6,7,7,3,4,4,6,7,2,2],[6,null,3,1,4,7,4,2,2,1,6,3,7,1,4,3,1,7,8,2,2,4,4,2,2,8,3,3,2,1,5,2,3,4,2,3,4,3,2,4,4,3,6,3,5,6,3,4,3,6,5],[5,3,null,2,5,7,5,2,1,2,5,2,6,2,4,4,2,6,7,1,2,4,4,3,3,7,2,4,3,2,6,2,3,4,3,2,5,4,3,5,3,4,6,3,4,5,2,5,4,5,5],[5,1,2,null,3,7,5,2,2,2,5,2,5,2,3,4,1,6,7,1,3,4,4,2,3,7,2,4,2,2,6,2,4,4,2,2,5,4,3,5,3,4,6,4,4,6,2,5,4,5,5],[8,4,5,3,null,9,7,5,5,4,8,5,9,4,2,6,3,5,4,4,5,7,7,2,5,10,5,6,2,4,8,5,6,7,5,3,7,6,5,7,6,6,9,6,7,6,5,7,6,7,7],[2,7,7,7,9,null,10,8,6,8,2,5,1,7,9,7,7,6,7,6,8,10,9,8,8,1,5,7,8,8,5,8,7,7,8,7,8,9,8,6,4,7,7,8,4,5,6,7,7,3,3],[9,4,5,5,7,10,null,3,4,4,8,6,9,3,8,4,4,10,11,5,3,2,4,5,3,10,5,4,5,4,5,3,4,4,4,7,5,1,2,5,7,5,6,3,8,9,5,5,4,9,8],[6,2,2,2,5,8,3,null,2,1,6,3,7,1,5,3,2,7,8,3,1,3,3,3,2,8,3,2,3,2,3,2,2,3,2,4,3,2,1,3,4,2,5,2,5,7,3,3,2,7,6],[5,2,1,2,5,6,4,2,null,2,5,2,6,2,4,4,3,6,7,2,2,4,4,4,2,7,2,4,3,2,5,2,3,4,3,3,4,3,2,5,3,4,6,3,4,5,1,5,3,5,4],[7,1,2,2,4,8,4,1,2,null,6,3,7,1,5,3,1,8,8,2,1,3,3,2,2,8,3,3,2,1,5,1,3,3,2,3,4,3,2,4,5,3,5,3,5,7,3,4,3,7,6],[1,6,5,5,8,2,8,6,5,6,null,3,2,6,7,6,5,4,5,4,6,8,6,6,6,3,3,5,6,6,4,6,5,5,7,6,6,7,6,5,2,6,9,6,2,3,4,5,6,1,1],[4,3,2,2,5,5,6,3,2,3,3,null,4,3,4,5,2,5,6,2,3,5,5,3,4,5,1,5,3,3,4,4,4,5,4,3,6,5,4,5,2,5,7,4,3,4,1,5,5,4,3],[1,7,6,5,9,1,9,7,6,7,2,4,null,7,8,7,6,5,6,5,7,9,7,7,7,2,4,6,7,7,5,7,7,6,8,7,8,8,7,6,3,7,8,7,3,5,5,6,7,2,2],[6,1,2,2,4,7,3,1,2,1,6,3,7,null,5,3,1,7,8,2,1,3,3,3,1,8,3,3,2,1,4,1,2,3,2,4,4,2,2,4,4,3,5,2,5,6,2,4,3,6,5],[7,4,4,3,2,9,8,5,4,5,7,4,8,5,null,7,4,4,3,3,5,7,7,4,6,9,4,7,4,5,8,5,6,7,5,2,8,7,6,8,5,7,9,7,6,5,4,8,7,6,7],[6,3,4,4,6,7,4,3,4,3,6,5,7,3,7,null,4,7,8,5,2,3,1,5,3,8,5,2,5,3,2,3,2,1,4,6,1,3,2,1,4,3,3,1,5,6,4,1,1,6,6],[6,1,2,1,3,7,4,2,3,1,5,2,6,1,4,4,null,7,7,1,2,4,4,2,2,7,3,4,1,1,5,2,3,4,2,3,5,3,2,5,4,4,6,3,4,6,2,5,4,6,5],[5,7,6,6,5,6,10,7,6,8,4,5,5,7,4,7,7,null,1,6,8,10,8,8,8,7,5,6,7,8,6,8,7,7,8,5,8,9,8,7,4,7,9,8,3,2,5,7,8,3,4],[6,8,7,7,4,7,11,8,7,8,5,6,6,8,3,8,7,1,null,7,8,10,8,6,9,8,6,7,8,8,7,8,8,8,9,5,9,10,9,8,4,8,10,8,4,2,6,7,8,4,5],[5,2,1,1,4,6,5,3,2,2,4,2,5,2,3,5,1,6,7,null,3,5,5,2,3,6,2,5,2,2,5,3,4,5,3,2,6,4,3,6,3,5,7,4,3,5,2,6,5,5,4],[7,2,2,3,5,8,3,1,2,1,6,3,7,1,5,2,2,8,8,3,null,3,3,3,1,8,3,2,3,2,4,2,2,3,2,4,3,2,1,3,5,2,5,2,5,7,3,3,2,7,6],[9,4,4,4,7,10,2,3,4,3,8,5,9,3,7,3,4,10,10,5,3,null,4,5,2,10,5,4,5,4,5,3,4,4,4,6,4,1,2,4,7,4,6,3,7,9,5,4,3,9,8],[7,4,4,4,7,9,4,3,4,3,6,5,7,3,7,1,4,8,8,5,3,4,null,5,3,8,5,2,5,4,2,3,2,1,4,6,1,3,2,2,4,3,2,2,5,7,5,2,1,7,6],[7,2,3,2,2,8,5,3,4,2,6,3,7,3,4,5,2,8,6,2,3,5,5,null,3,8,3,5,1,2,6,3,4,5,3,3,6,4,4,6,5,5,7,4,5,7,3,6,5,7,6],[7,2,3,3,5,8,3,2,2,2,6,4,7,1,6,3,2,8,9,3,1,2,3,3,null,8,4,3,3,2,4,1,3,3,2,4,3,2,1,4,5,3,5,2,6,7,3,3,2,7,6],[2,8,7,7,10,1,10,8,7,8,3,5,2,8,9,8,7,7,8,6,8,10,8,8,8,null,5,7,8,8,6,8,7,7,9,8,9,9,8,7,4,8,8,8,4,6,6,7,8,3,3],[4,3,2,2,5,5,5,3,2,3,3,1,4,3,4,5,3,5,6,2,3,5,5,3,4,5,null,5,3,3,4,3,4,5,4,3,6,4,4,5,2,5,7,4,3,4,1,5,5,4,3],[6,3,4,4,6,7,4,2,4,3,5,5,6,3,7,2,4,6,7,5,2,4,2,5,3,7,5,null,5,3,2,3,1,2,4,6,3,3,2,2,3,11,4,2,4,6,4,1,2,6,5],[6,2,3,2,2,8,5,3,3,2,6,3,7,2,4,5,1,7,8,2,3,5,5,1,3,8,3,5,null,2,6,3,4,5,3,3,5,4,3,6,4,5,7,4,5,7,3,5,4,7,6],[7,1,2,2,4,8,4,2,2,1,6,3,7,1,5,3,1,8,8,2,2,4,4,2,2,8,3,3,2,null,5,2,3,4,1,3,4,3,2,4,5,3,6,3,5,7,3,4,3,7,6],[5,5,6,6,8,5,5,3,5,5,4,4,5,4,8,2,5,6,7,5,4,5,2,6,4,6,4,2,6,5,null,4,2,2,5,6,3,4,3,2,3,2,4,3,3,5,4,1,2,5,4],[7,2,2,2,5,8,3,2,2,1,6,4,7,1,5,3,2,8,8,3,2,3,3,3,1,8,3,3,3,2,4,null,3,3,1,4,4,2,2,4,5,3,5,2,5,7,3,4,3,7,6],[6,3,3,4,6,7,4,2,3,3,5,4,7,2,6,2,3,7,8,4,2,4,2,4,3,7,4,1,4,3,2,3,null,3,3,5,3,3,2,2,4,1,4,1,5,6,4,1,2,6,5],[6,4,4,4,7,7,4,3,4,3,5,5,6,3,7,1,4,7,8,5,3,4,1,5,3,7,5,2,5,4,2,3,3,null,4,6,2,3,2,1,4,3,3,2,5,6,5,1,1,6,5],[7,2,3,2,5,8,4,2,3,2,7,4,8,2,5,4,2,8,9,3,2,4,4,3,2,9,4,4,3,1,5,1,3,4,null,4,4,6,5,5,5,4,6,3,6,7,4,5,3,7,6],[6,3,2,2,3,7,7,4,3,3,6,3,7,4,2,6,3,5,5,2,4,6,6,3,4,8,3,6,3,3,6,4,5,6,4,null,7,3,2,7,4,6,8,5,5,6,3,7,6,6,5],[7,4,5,5,7,8,5,3,4,4,6,6,8,4,8,1,5,8,9,6,3,4,1,6,3,9,6,3,5,4,3,4,3,2,4,7,null,3,1,2,5,4,2,2,6,7,5,2,2,7,6],[8,3,4,4,6,9,1,2,3,3,7,5,8,2,7,3,3,9,10,4,2,1,3,4,2,9,4,3,4,3,4,2,3,3,6,3,3,null,1,3,6,4,5,2,6,8,4,3,2,8,7],[7,2,3,3,5,8,2,1,2,2,6,4,7,2,6,2,2,8,9,3,1,2,2,4,1,8,4,2,3,2,3,2,2,2,5,2,1,1,null,3,5,3,4,1,6,7,3,3,2,7,6],[6,4,5,5,7,6,5,3,5,4,5,5,6,4,8,1,5,7,8,6,3,4,2,6,4,7,5,2,6,4,2,4,2,1,5,7,2,3,3,null,4,2,3,2,4,6,5,1,2,6,5],[3,4,3,3,6,4,7,4,3,5,2,2,3,4,5,4,4,4,4,3,5,7,4,5,5,4,2,3,4,5,3,5,4,4,5,4,5,6,5,4,null,4,6,5,1,3,2,4,5,3,2],[6,3,4,4,6,7,5,2,4,3,6,5,7,3,7,3,4,7,8,5,2,4,3,5,3,8,5,11,5,3,2,3,1,3,4,6,4,4,3,2,4,null,5,2,5,6,4,2,3,6,5],[7,6,6,6,9,7,6,5,6,5,9,7,8,5,9,3,6,9,10,7,5,6,2,7,5,8,7,4,7,6,4,5,4,3,6,8,2,5,4,3,6,5,null,4,7,9,7,4,3,10,9],[7,3,3,4,6,8,3,2,3,3,6,4,7,2,7,1,3,8,8,4,2,3,2,4,2,8,4,2,4,3,3,2,1,2,3,5,2,2,1,2,5,2,4,null,5,7,4,2,1,7,6],[3,5,4,4,7,4,8,5,4,5,2,3,3,5,6,5,4,3,4,3,5,7,5,5,6,4,3,4,5,5,3,5,5,5,6,5,6,6,6,4,1,5,7,5,null,2,3,4,5,2,2],[4,6,5,6,6,5,9,7,5,7,3,4,5,6,5,6,6,2,2,5,7,9,7,7,7,6,4,6,7,7,5,7,6,6,7,6,7,8,7,6,3,6,9,7,2,null,5,6,7,3,4],[4,3,2,2,5,6,5,3,1,3,4,1,5,2,4,4,2,5,6,2,3,5,5,3,3,6,1,4,3,3,4,3,4,5,4,3,5,4,3,5,2,4,7,4,3,5,null,5,4,4,4],[6,4,5,5,7,7,5,3,5,4,5,5,6,4,8,1,5,7,7,6,3,4,2,6,3,7,5,1,5,4,1,4,1,1,5,7,2,3,3,1,4,2,4,2,4,6,5,null,2,6,5],[7,3,4,4,6,7,4,2,3,3,6,5,7,3,7,1,4,8,8,5,2,3,1,5,2,8,5,2,4,3,2,3,2,1,3,6,2,2,2,2,5,3,3,1,5,7,4,2,null,7,6],[2,6,5,5,7,3,9,7,5,7,1,4,2,6,6,6,6,3,4,5,7,9,7,7,7,3,4,6,7,7,5,7,6,6,7,6,7,8,7,6,3,6,10,7,2,3,4,6,7,null,2],[2,5,5,5,7,3,8,6,4,6,1,3,2,5,7,6,5,4,5,4,6,8,6,6,6,3,3,5,6,6,4,6,5,5,6,5,6,7,6,5,2,5,9,6,2,4,4,5,6,2,null]];
+
+const TARIFFS={1:["0–10",2.30],2:["10–20",2.90],3:["20–30",3.50],4:["30–40",4.10],5:["40–50",4.70],6:["50–60",5.30],7:["60–70",5.90],8:["70–80",6.50],9:["80–90",7.10],10:["90–100",7.70],11:["100–125",9.10],12:["125–150",10.50],13:["150–175",12.00],14:["175–200",13.50],15:["200–225",15.00],16:["225–250",16.50],17:["250–275",17.50],18:["275–300",19.00],19:["300–325",20.50],20:["325–350",22.00]};
+
+const F = document.getElementById("from"), A = document.getElementById("to");
+const ticketContent = document.getElementById("ticket-content");
+const ticketDate = document.getElementById("ticket-date");
+
+function fillSelect(sel, selectedIndex){
+  sel.innerHTML = STOPS.map((name,i)=>`<option value="${i}">${name}</option>`).join("");
+  sel.value = selectedIndex;
+}
+fillSelect(F, 0);
+fillSelect(A, 1);
+
+function euro(n){
+  return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR",minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+}
+
+// Cerca il valore in entrambi i versi prima di arrendersi: se la cella A→B non è
+// leggibile ma B→A sì, il numero di tratta è comunque noto (la tariffa è la stessa
+// in entrambe le direzioni).
+function resolveTratta(i,j){
+  const direct = MATRIX[i][j];
+  if(direct != null) return {value:direct, inferred:false};
+  const reverse = MATRIX[j][i];
+  if(reverse != null) return {value:reverse, inferred:true};
+  return {value:null, inferred:false};
+}
+
+function renderPlaceholder(text){
+  ticketContent.innerHTML = `
+    <div class="placeholder">
+      <div class="big">— · —</div>
+      <p>${text}</p>
+    </div>`;
+}
+
+function renderSame(){
+  renderPlaceholder("Partenza e arrivo coincidono: scegli due fermate diverse per calcolare la tratta.");
+}
+
+function renderUnreadable(routeLabel){
+  ticketContent.innerHTML = `
+    <div class="ticket-body">
+      <div class="ticket-col">
+        <div class="cap">Numero tratta</div>
+        <div class="tratta mono" style="font-size:30px">Verificare</div>
+      </div>
+      <div class="ticket-divider"></div>
+      <div class="ticket-col">
+        <div class="cap">Tariffa</div>
+        <div class="price mono">—</div>
+      </div>
+    </div>
+    <div class="route"><span>${routeLabel[0]}</span><span class="arrow">→</span><span>${routeLabel[1]}</span></div>
+    <div class="msg warn"><span class="ico">⚠️</span><span>Questo incrocio non è leggibile con certezza nella tabella originale, in nessuna delle due direzioni. Verifica la tariffa a bordo con l'operatore.</span></div>
+  `;
+}
+
+function renderResult(x, inferred, routeLabel){
+  const z = TARIFFS[x];
+  ticketContent.innerHTML = `
+    <div class="ticket-body">
+      <div class="ticket-col">
+        <div class="cap">Numero tratta</div>
+        <div class="tratta mono">${x}</div>
+      </div>
+      <div class="ticket-divider"></div>
+      <div class="ticket-col">
+        <div class="cap">Tariffa a bordo</div>
+        <div class="price mono">${z ? euro(z[1]) : "—"}</div>
+      </div>
+    </div>
+    <div class="route"><span>${routeLabel[0]}</span><span class="arrow">→</span><span>${routeLabel[1]}</span></div>
+    <div class="fascia-row">Fascia chilometrica: <b>${z ? z[0]+" km" : "—"}</b></div>
+    ${inferred ? `<div class="msg info"><span class="ico">ℹ️</span><span>Tratta dedotta dal verso opposto (${routeLabel[1]} → ${routeLabel[0]}), non leggibile direttamente in tabella per questo verso.</span></div>` : ""}
+  `;
+}
+
+function calc(){
+  const i = Number(F.value), j = Number(A.value);
+  const routeLabel = [STOPS[i], STOPS[j]];
+
+  if(i === j){ renderSame(); return; }
+
+  const {value, inferred} = resolveTratta(i,j);
+  if(value == null){ renderUnreadable(routeLabel); return; }
+
+  renderResult(value, inferred, routeLabel);
+}
+
+document.getElementById("calc").onclick = calc;
+document.getElementById("swap").onclick = () => { const x = F.value; F.value = A.value; A.value = x; calc(); };
+F.onchange = calc; A.onchange = calc;
+
+ticketDate.textContent = new Date().toLocaleDateString("it-IT",{day:"2-digit",month:"2-digit",year:"numeric"});
+calc();
+</script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+}
+</script>
+</body>
+</html>
