@@ -58,9 +58,10 @@
   }
   .brand{
     position:relative;z-index:1;display:flex;justify-content:center;align-items:center;
-    min-height:58px;margin-bottom:7px;
+    min-height:104px;margin-bottom:7px;padding:8px 14px;
+    background:#fff;border-radius:0 0 34px 34px;
   }
-  .brand img{display:block;width:min(100%,340px);height:auto;max-height:68px;object-fit:contain}
+  .brand img{display:block;width:min(100%,390px);height:auto;max-height:96px;object-fit:contain}
   .eyebrow{
     position:relative;z-index:1;display:flex;align-items:center;gap:8px;
     font-size:10px;letter-spacing:.11em;text-transform:uppercase;
@@ -169,7 +170,7 @@
 <body>
 <div class="app">
   <header>
-    <div class="brand"><img src="./sta-50-logo-header.png" alt="STA · 50 anni · Muoviamo la Sardegna"></div>
+    <div class="brand"><img src="./sta-50-logo.png" alt="STA · 50 anni · Muoviamo la Sardegna"></div>
     <div class="eyebrow"><span class="dot"></span>STA IGLESIAS · AGE08 · AGG. 03/08/2023</div>
     <h1>Calcolo tratta</h1>
     <div class="sub">Seleziona partenza e arrivo per la tariffa a bordo</div>
@@ -192,9 +193,7 @@
     </section>
 
     <section class="ticket" id="ticket">
-      <div class="t-eyebrow">Servizio automobilistico<br>extraurbano</div>
-      <div class="t-title serif">Corsa semplice</div>
-      <div class="t-caption serif">Da convalidare all'inizio del viaggio · <b>vale per una sola corsa</b></div>
+      <div class="t-eyebrow">Servizio automobilistico</div>
       <div id="ticket-content"></div>
       <div class="t-footer" id="ticket-footer"></div>
     </section>
