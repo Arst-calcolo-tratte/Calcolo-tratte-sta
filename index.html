@@ -89,17 +89,37 @@
   }
 
   .select-wrap{position:relative}
-  select{
+  .search-select-native{
+    position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;
+    overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;
+  }
+  .autocomplete-input{
     width:100%;height:54px;border:1.5px solid #CDD5E2;border-radius:var(--radius-md);
-    padding:0 42px 0 15px;font-size:16px;font-weight:700;background:#FBFCFE;color:var(--ink);
-    appearance:none;-webkit-appearance:none;font-family:'Inter',sans-serif;
+    padding:0 48px 0 15px;font-size:16px;font-weight:700;background:#FBFCFE;color:var(--ink);
+    font-family:'Inter',sans-serif;outline:none;
     transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;
   }
-  select:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(36,59,112,.13)}
-  .select-wrap::after{
+  .autocomplete-input::placeholder{color:#8B95A7;font-weight:600}
+  .autocomplete-input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(36,59,112,.13)}
+  .autocomplete-wrap::after{
     content:"";position:absolute;right:17px;top:50%;transform:translateY(-65%) rotate(45deg);
-    width:8px;height:8px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);pointer-events:none;
+    width:8px;height:8px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);
+    pointer-events:none;
   }
+  .suggestions{
+    position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;display:none;
+    max-height:230px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 12px 28px rgba(24,42,82,.18);padding:6px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .suggestions.open{display:block}
+  .suggestion{
+    width:100%;display:block;border:0;background:transparent;box-shadow:none;border-radius:10px;
+    padding:12px 11px;text-align:left;font-size:14px;font-weight:700;color:var(--ink);
+    font-family:'Inter',sans-serif;cursor:pointer;
+  }
+  .suggestion:hover,.suggestion.active{background:var(--info-soft);color:var(--blue-deep)}
+  .suggestion-empty{padding:12px 11px;font-size:13px;color:var(--muted);text-align:center}
   .field{margin-top:14px}
 
   .buttons{display:flex;gap:10px;margin-top:17px}
@@ -179,11 +199,19 @@
   <main>
     <section class="card">
       <label for="from"><span class="idx">A</span>Partenza</label>
-      <div class="select-wrap"><select id="from"></select></div>
+      <div class="select-wrap autocomplete-wrap">
+        <select id="from" class="search-select-native" aria-hidden="true" tabindex="-1"></select>
+        <input id="from-search" class="autocomplete-input" type="search" inputmode="search" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Cerca località..." role="combobox" aria-autocomplete="list" aria-controls="from-suggestions" aria-expanded="false">
+        <div id="from-suggestions" class="suggestions" role="listbox"></div>
+      </div>
 
       <div class="field">
-        <label for="to"><span class="idx">B</span>Arrivo</label>
-        <div class="select-wrap"><select id="to"></select></div>
+        <label for="to-search"><span class="idx">B</span>Arrivo</label>
+        <div class="select-wrap autocomplete-wrap">
+          <select id="to" class="search-select-native" aria-hidden="true" tabindex="-1"></select>
+          <input id="to-search" class="autocomplete-input" type="search" inputmode="search" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Cerca località..." role="combobox" aria-autocomplete="list" aria-controls="to-suggestions" aria-expanded="false">
+          <div id="to-suggestions" class="suggestions" role="listbox"></div>
+        </div>
       </div>
 
       <div class="buttons">
@@ -245,6 +273,102 @@ function fillSelect(sel, selectedIndex){
 }
 fillSelect(F, 0);
 fillSelect(A, 1);
+
+function normalizeSearch(value){
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
+function setupAutocomplete(select, input, suggestions){
+  let activeIndex = -1;
+
+  function render(query, open=true){
+    const q = normalizeSearch(query);
+    const matches = STOPS.map((name,index)=>({name,index}))
+      .filter(item => !q || normalizeSearch(item.name).includes(q));
+
+    suggestions.innerHTML = matches.length
+      ? matches.map((item,k)=>`<button type="button" class="suggestion" role="option" data-index="${item.index}" aria-selected="false">${item.name}</button>`).join("")
+      : `<div class="suggestion-empty">Nessuna località trovata</div>`;
+
+    activeIndex = -1;
+    if(open) {
+      suggestions.classList.add("open");
+      input.setAttribute("aria-expanded","true");
+    }
+  }
+
+  function choose(index){
+    if(index == null || index < 0 || index >= STOPS.length) return;
+    select.value = String(index);
+    input.value = STOPS[index];
+    suggestions.classList.remove("open");
+    input.setAttribute("aria-expanded","false");
+    input.setAttribute("aria-activedescendant", "");
+    select.dispatchEvent(new Event("change", {bubbles:true}));
+  }
+
+  input.addEventListener("focus", () => {
+    // Al tocco il campo viene svuotato: l'utente può iniziare a digitare
+    // immediatamente, senza dover cancellare manualmente la località precedente.
+    input.value = "";
+    input.select();
+    render("", true);
+  });
+  input.addEventListener("input", () => render(input.value, true));
+  input.addEventListener("keydown", (event) => {
+    const items = suggestions.querySelectorAll(".suggestion");
+    if(event.key === "ArrowDown"){
+      event.preventDefault();
+      if(!items.length) return;
+      activeIndex = (activeIndex + 1) % items.length;
+      items.forEach((el,k)=>el.classList.toggle("active",k===activeIndex));
+      items[activeIndex].scrollIntoView({block:"nearest"});
+    } else if(event.key === "ArrowUp"){
+      event.preventDefault();
+      if(!items.length) return;
+      activeIndex = (activeIndex - 1 + items.length) % items.length;
+      items.forEach((el,k)=>el.classList.toggle("active",k===activeIndex));
+      items[activeIndex].scrollIntoView({block:"nearest"});
+    } else if(event.key === "Enter"){
+      if(activeIndex >= 0 && items[activeIndex]){
+        event.preventDefault();
+        choose(Number(items[activeIndex].dataset.index));
+      } else {
+        const exact = STOPS.findIndex(name => normalizeSearch(name) === normalizeSearch(input.value));
+        if(exact >= 0){ event.preventDefault(); choose(exact); }
+      }
+    } else if(event.key === "Escape"){
+      suggestions.classList.remove("open");
+      input.setAttribute("aria-expanded","false");
+    }
+  });
+
+  suggestions.addEventListener("mousedown", event => event.preventDefault());
+  suggestions.addEventListener("click", event => {
+    const option = event.target.closest(".suggestion");
+    if(option) choose(Number(option.dataset.index));
+  });
+
+  input.addEventListener("blur", () => {
+    setTimeout(() => {
+      // Se l'utente esce senza scegliere una nuova località, ripristina
+      // quella già selezionata nel controllo sottostante.
+      if(input.value.trim() === "") input.value = STOPS[Number(select.value)] || "";
+      suggestions.classList.remove("open");
+      input.setAttribute("aria-expanded","false");
+    }, 120);
+  });
+
+  return {
+    sync(){ input.value = STOPS[Number(select.value)] || ""; },
+    open(){ render(input.value, true); }
+  };
+}
+
+const fromSearch = setupAutocomplete(F, document.getElementById("from-search"), document.getElementById("from-suggestions"));
+const toSearch = setupAutocomplete(A, document.getElementById("to-search"), document.getElementById("to-suggestions"));
+fromSearch.sync();
+toSearch.sync();
 
 function euro(n){
   return "€ " + n.toFixed(2).replace(".", ",");
@@ -324,8 +448,21 @@ function calc(){
 }
 
 document.getElementById("calc").onclick = calc;
-document.getElementById("swap").onclick = () => { const x = F.value; F.value = A.value; A.value = x; calc(); };
-F.onchange = calc; A.onchange = calc;
+document.getElementById("swap").onclick = () => {
+  const x = F.value; F.value = A.value; A.value = x;
+  fromSearch.sync(); toSearch.sync();
+  calc();
+};
+F.onchange = () => { fromSearch.sync(); calc(); };
+A.onchange = () => { toSearch.sync(); calc(); };
+
+// Chiude i suggerimenti toccando fuori dai due campi, senza alterare la selezione.
+document.addEventListener("pointerdown", (event) => {
+  if(!event.target.closest(".autocomplete-wrap")){
+    document.querySelectorAll(".suggestions.open").forEach(el => el.classList.remove("open"));
+    document.querySelectorAll(".autocomplete-input").forEach(el => el.setAttribute("aria-expanded","false"));
+  }
+});
 
 calc();
 </script>
