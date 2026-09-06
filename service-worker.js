@@ -1,4 +1,4 @@
-const CACHE = 'sta-tratte-v4';
+const CACHE = 'sta-tratte-v6';
 const ASSETS = [
   './',
   './index.html',
