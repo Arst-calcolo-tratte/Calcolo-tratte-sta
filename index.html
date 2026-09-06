@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Tratte STA">
-<meta name="theme-color" content="#1B5FA6">
+<meta name="theme-color" content="#243B70">
 <meta name="description" content="Calcolo rapido di numero tratta e tariffa a bordo per la rete STA Iglesias.">
 <title>STA Iglesias · Calcolo Tratta</title>
 <link rel="manifest" href="./manifest.webmanifest">
@@ -47,8 +47,8 @@
 
   header{
     background:linear-gradient(160deg,#1d3262 0%,#243B70 64%,#2d4a88 100%);color:#fff;
-    padding:calc(env(safe-area-inset-top,0px) + 10px) 18px 14px;
-    position:sticky;top:0;z-index:5;overflow:hidden;
+    padding:calc(env(safe-area-inset-top,0px) + 8px) 18px 13px;
+    position:relative;z-index:1;overflow:hidden;
     border-bottom:4px solid var(--red);
     box-shadow:0 5px 18px rgba(24,42,82,.16);
   }
@@ -58,27 +58,27 @@
   }
   .brand{
     position:relative;z-index:1;display:flex;justify-content:center;align-items:center;
-    min-height:104px;margin-bottom:7px;padding:8px 14px;
-    background:#fff;border-radius:0 0 34px 34px;
+    min-height:104px;margin-bottom:7px;padding:5px 14px;
+    background:#fff;border-radius:0 0 30px 30px;
   }
-  .brand img{display:block;width:min(100%,390px);height:auto;max-height:96px;object-fit:contain}
+  .brand img{display:block;width:min(100%,400px);height:auto;max-height:96px;object-fit:contain}
   .eyebrow{
     position:relative;z-index:1;display:flex;align-items:center;gap:8px;
     font-size:10px;letter-spacing:.11em;text-transform:uppercase;
     color:#D9E1F0;margin-bottom:5px;font-weight:700;
   }
   .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(215,25,32,.18)}
-  h1{position:relative;z-index:1;margin:0;font-size:27px;font-weight:800;letter-spacing:-.025em;line-height:1.1;font-family:'Inter',sans-serif}
+  h1{position:relative;z-index:1;margin:0;font-size:23px;font-weight:800;letter-spacing:-.025em;line-height:1.1;font-family:'Inter',sans-serif}
   header .sub{position:relative;z-index:1;margin-top:5px;font-size:13px;color:#E1E7F2}
 
   main{padding:18px 16px 38px;flex:1}
 
   .card{
-    position:relative;background:#fff;border-radius:var(--radius-lg);padding:19px;margin-bottom:16px;
+    position:relative;z-index:3;border-radius:var(--radius-lg);padding:19px;margin-bottom:16px;
     box-shadow:0 2px 4px rgba(24,42,82,.04),0 12px 28px -16px rgba(24,42,82,.25);
-    border:1px solid var(--line);overflow:hidden;
+    border:1px solid var(--line);
+    background:linear-gradient(90deg,var(--blue) 0 38%,var(--red) 38% 62%,var(--blue) 62% 100%) 0 0/100% 4px no-repeat,#fff;
   }
-  .card::before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--blue) 0 38%,var(--red) 38% 62%,var(--blue) 62% 100%)}
 
   label{display:flex;align-items:center;gap:8px;font-weight:800;font-size:12px;
     text-transform:uppercase;letter-spacing:.075em;color:var(--blue);margin-bottom:8px}
@@ -99,6 +99,8 @@
     font-family:'Inter',sans-serif;outline:none;
     transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;
   }
+  .autocomplete-input::-webkit-search-cancel-button,
+  .autocomplete-input::-webkit-search-decoration{-webkit-appearance:none;display:none}
   .autocomplete-input::placeholder{color:#8B95A7;font-weight:600}
   .autocomplete-input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(36,59,112,.13)}
   .autocomplete-wrap::after{
@@ -108,7 +110,7 @@
   }
   .suggestions{
     position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;display:none;
-    max-height:230px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;
+    max-height:min(300px,44vh);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;
     box-shadow:0 12px 28px rgba(24,42,82,.18);padding:6px;
     -webkit-overflow-scrolling:touch;
   }
@@ -119,6 +121,8 @@
     font-family:'Inter',sans-serif;cursor:pointer;
   }
   .suggestion:hover,.suggestion.active{background:var(--info-soft);color:var(--blue-deep)}
+  .suggestion mark{background:transparent;color:var(--red);font-weight:800}
+  .suggestion.active mark{color:var(--red)}
   .suggestion-empty{padding:12px 11px;font-size:13px;color:var(--muted);text-align:center}
   .field{margin-top:14px}
 
@@ -145,8 +149,6 @@
     width:24px;height:24px;border-radius:50%;background:var(--bg);box-shadow:0 0 0 1px var(--paper-edge) inset;
   }
   .ticket::before{left:-12px}.ticket::after{right:-12px}
-  .ticket::marker{display:none}
-  .ticket::selection{background:rgba(36,59,112,.15)}
   .ticket > .t-eyebrow::after{
     content:"";display:block;width:92px;height:4px;margin:10px auto 0;
     background:linear-gradient(90deg,var(--blue) 0 35%,var(--red) 35% 65%,var(--blue) 65% 100%);
@@ -169,7 +171,7 @@
   .t-route .arrow{color:var(--red);padding:0 7px;font-weight:800}
   .t-footer{text-align:center;margin-top:16px;padding-top:12px;border-top:1px dashed #D6DCE7;font-size:11px;color:var(--muted);letter-spacing:.02em;line-height:1.7}
   .t-footer span{display:block}
-  .placeholder{text-align:center;padding:26px 10px 6px;color:var(--muted)}
+  .placeholder{min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;color:var(--muted)}
   .placeholder .big{font-size:15px;margin-bottom:4px}.placeholder p{margin:0;font-size:13px;line-height:1.5}
   .msg{position:relative;z-index:1;margin-top:12px;padding:11px 13px;border-radius:10px;font-size:12.5px;line-height:1.45;display:flex;gap:8px;align-items:flex-start}
   .msg.warn{background:var(--warn-soft);color:var(--warn)}.msg .ico{flex:0 0 auto;margin-top:1px}
@@ -183,7 +185,7 @@
   footer{text-align:center;padding:6px 20px 28px;font-size:11px;color:var(--muted);line-height:1.6}
 
   @media (max-width:380px){
-    header{padding-left:15px;padding-right:15px}.brand img{width:100%;max-width:340px}.card{padding:17px}.ticket{padding-left:17px;padding-right:17px}
+    header{padding-left:15px;padding-right:15px}.brand img{width:100%;max-width:360px}.card{padding:17px}.ticket{padding-left:17px;padding-right:17px}
   }
 </style>
 </head>
@@ -215,8 +217,7 @@
       </div>
 
       <div class="buttons">
-        <button class="main" id="calc">Calcola tratta</button>
-        <button class="ghost" id="swap">↕ Inverti</button>
+        <button class="ghost" id="swap">↕ Inverti partenza e arrivo</button>
       </div>
     </section>
 
@@ -237,14 +238,14 @@
 
 <svg style="display:none">
   <symbol id="bus-icon" viewBox="0 0 200 120">
-    <rect x="8" y="18" width="184" height="72" rx="14" fill="none" stroke="#1B5FA6" stroke-width="6"/>
-    <rect x="8" y="18" width="184" height="30" rx="10" fill="none" stroke="#1B5FA6" stroke-width="6"/>
-    <line x1="55" y1="18" x2="55" y2="48" stroke="#1B5FA6" stroke-width="6"/>
-    <line x1="100" y1="18" x2="100" y2="48" stroke="#1B5FA6" stroke-width="6"/>
-    <line x1="145" y1="18" x2="145" y2="48" stroke="#1B5FA6" stroke-width="6"/>
-    <circle cx="48" cy="100" r="14" fill="none" stroke="#1B5FA6" stroke-width="6"/>
-    <circle cx="152" cy="100" r="14" fill="none" stroke="#1B5FA6" stroke-width="6"/>
-    <line x1="8" y1="70" x2="192" y2="70" stroke="#1B5FA6" stroke-width="6"/>
+    <rect x="8" y="18" width="184" height="72" rx="14" fill="none" stroke="var(--blue)" stroke-width="6"/>
+    <rect x="8" y="18" width="184" height="30" rx="10" fill="none" stroke="var(--blue)" stroke-width="6"/>
+    <line x1="55" y1="18" x2="55" y2="48" stroke="var(--blue)" stroke-width="6"/>
+    <line x1="100" y1="18" x2="100" y2="48" stroke="var(--blue)" stroke-width="6"/>
+    <line x1="145" y1="18" x2="145" y2="48" stroke="var(--blue)" stroke-width="6"/>
+    <circle cx="48" cy="100" r="14" fill="none" stroke="var(--blue)" stroke-width="6"/>
+    <circle cx="152" cy="100" r="14" fill="none" stroke="var(--blue)" stroke-width="6"/>
+    <line x1="8" y1="70" x2="192" y2="70" stroke="var(--blue)" stroke-width="6"/>
   </symbol>
 </svg>
 
@@ -274,26 +275,116 @@ function fillSelect(sel, selectedIndex){
 fillSelect(F, 0);
 fillSelect(A, 1);
 
+// Normalizzazione "morbida": via accenti e punteggiatura, cosi "S.ANTIOCO",
+// "s antioco" e "sant'antioco" portano tutti allo stesso risultato.
+function normalizeChars(value){
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g," ");
+}
 function normalizeSearch(value){
-  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  return normalizeChars(value).replace(/\s+/g," ").trim();
+}
+function tokenize(value){
+  return normalizeSearch(value).split(" ").filter(Boolean);
+}
+
+const STOP_TOKENS = STOPS.map(tokenize);
+
+// Forme compattate senza spazi, con le abbreviazioni puntate gia' sciolte:
+// servono a far funzionare anche chi digita tutto attaccato ("santantioco").
+const STOP_FLAT = STOPS.map(name => {
+  const parts = tokenize(name);
+  const forms = [parts.join("")];
+  if(parts[0] === "s"){
+    const rest = parts.slice(1).join("");
+    ["san","sant","santa"].forEach(pre => forms.push(pre + rest));
+  }
+  return forms;
+});
+
+// Punteggio: 4 = inizia il nome, 3 = inizia una parola successiva, 1 = dentro una
+// parola. La regola sulle parole di 1-2 lettere fa combaciare "san"/"sant"/"santa"
+// con le abbreviazioni puntate del tariffario (S.ANTIOCO, S.ANNA, S.GIOVANNI...).
+function scoreStop(index, qTokens){
+  const joined = qTokens.join("");
+  for(const flat of STOP_FLAT[index]){
+    if(flat.startsWith(joined)) return 100;   // corrispondenza dall'inizio: sempre in cima
+  }
+  const parts = STOP_TOKENS[index];
+  let total = 0;
+  for(const q of qTokens){
+    let best = 0;
+    for(let t = 0; t < parts.length; t++){
+      const part = parts[t];
+      let s = 0;
+      if(part.startsWith(q)) s = (t === 0) ? 4 : 3;
+      else if(part.length <= 2 && q.startsWith(part)) s = (t === 0) ? 4 : 3;
+      else if(part.includes(q)) s = 1;
+      if(s > best) best = s;
+    }
+    if(!best) return -1;   // una parola digitata non trova riscontro: scarta
+    total += best;
+  }
+  return total;
+}
+
+// Evidenzia nella tendina la parte di nome che corrisponde a quanto digitato.
+function highlight(name, qTokens){
+  const flat = normalizeChars(name);
+  if(flat.length !== name.length || !qTokens.length) return name;
+  const hit = new Array(name.length).fill(false);
+  for(const q of qTokens){
+    let from = 0, at;
+    while((at = flat.indexOf(q, from)) !== -1){
+      for(let k = at; k < at + q.length; k++) hit[k] = true;
+      from = at + 1;
+    }
+  }
+  let out = "", open = false;
+  for(let k = 0; k < name.length; k++){
+    if(hit[k] && !open){ out += "<mark>"; open = true; }
+    if(!hit[k] && open){ out += "</mark>"; open = false; }
+    out += name[k];
+  }
+  return open ? out + "</mark>" : out;
 }
 
 function setupAutocomplete(select, input, suggestions){
   let activeIndex = -1;
 
+  function currentMatches(query){
+    const qTokens = tokenize(query);
+    if(!qTokens.length) return STOPS.map((name,index)=>({name,index}));
+    return STOPS.map((name,index)=>({name,index,score:scoreStop(index,qTokens)}))
+      .filter(item => item.score >= 0)
+      .sort((a,b) => b.score - a.score);   // a pari punteggio resta l'ordine alfabetico
+  }
+
   function render(query, open=true){
-    const q = normalizeSearch(query);
-    const matches = STOPS.map((name,index)=>({name,index}))
-      .filter(item => !q || normalizeSearch(item.name).includes(q));
+    const qTokens = tokenize(query);
+    const matches = currentMatches(query);
 
     suggestions.innerHTML = matches.length
-      ? matches.map((item,k)=>`<button type="button" class="suggestion" role="option" data-index="${item.index}" aria-selected="false">${item.name}</button>`).join("")
+      ? matches.map(item=>`<button type="button" class="suggestion" role="option" id="${input.id}-opt-${item.index}" data-index="${item.index}" aria-selected="false">${highlight(item.name, qTokens)}</button>`).join("")
       : `<div class="suggestion-empty">Nessuna località trovata</div>`;
 
+    suggestions.scrollTop = 0;
     activeIndex = -1;
+    input.removeAttribute("aria-activedescendant");
     if(open) {
       suggestions.classList.add("open");
       input.setAttribute("aria-expanded","true");
+    }
+  }
+
+  function markActive(items){
+    items.forEach((el,k)=>{
+      const on = k === activeIndex;
+      el.classList.toggle("active", on);
+      el.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    if(activeIndex >= 0){
+      items[activeIndex].scrollIntoView({block:"nearest"});
+      input.setAttribute("aria-activedescendant", items[activeIndex].id);
     }
   }
 
@@ -303,7 +394,7 @@ function setupAutocomplete(select, input, suggestions){
     input.value = STOPS[index];
     suggestions.classList.remove("open");
     input.setAttribute("aria-expanded","false");
-    input.setAttribute("aria-activedescendant", "");
+    input.removeAttribute("aria-activedescendant");
     select.dispatchEvent(new Event("change", {bubbles:true}));
   }
 
@@ -321,21 +412,21 @@ function setupAutocomplete(select, input, suggestions){
       event.preventDefault();
       if(!items.length) return;
       activeIndex = (activeIndex + 1) % items.length;
-      items.forEach((el,k)=>el.classList.toggle("active",k===activeIndex));
-      items[activeIndex].scrollIntoView({block:"nearest"});
+      markActive(items);
     } else if(event.key === "ArrowUp"){
       event.preventDefault();
       if(!items.length) return;
       activeIndex = (activeIndex - 1 + items.length) % items.length;
-      items.forEach((el,k)=>el.classList.toggle("active",k===activeIndex));
-      items[activeIndex].scrollIntoView({block:"nearest"});
+      markActive(items);
     } else if(event.key === "Enter"){
       if(activeIndex >= 0 && items[activeIndex]){
         event.preventDefault();
         choose(Number(items[activeIndex].dataset.index));
       } else {
         const exact = STOPS.findIndex(name => normalizeSearch(name) === normalizeSearch(input.value));
-        if(exact >= 0){ event.preventDefault(); choose(exact); }
+        if(exact >= 0){ event.preventDefault(); choose(exact); return; }
+        const matches = currentMatches(input.value);
+        if(matches.length === 1){ event.preventDefault(); choose(matches[0].index); }
       }
     } else if(event.key === "Escape"){
       suggestions.classList.remove("open");
@@ -351,9 +442,19 @@ function setupAutocomplete(select, input, suggestions){
 
   input.addEventListener("blur", () => {
     setTimeout(() => {
-      // Se l'utente esce senza scegliere una nuova località, ripristina
-      // quella già selezionata nel controllo sottostante.
-      if(input.value.trim() === "") input.value = STOPS[Number(select.value)] || "";
+      // Il campo non deve mai restare con un testo parziale mentre il biglietto
+      // calcola un'altra fermata: o il testo corrisponde a una località (e allora
+      // viene selezionata), o si ripristina quella attiva.
+      const typed = input.value.trim();
+      if(!typed){
+        input.value = STOPS[Number(select.value)] || "";
+      } else {
+        const exact = STOPS.findIndex(name => normalizeSearch(name) === normalizeSearch(typed));
+        const matches = exact >= 0 ? null : currentMatches(typed);
+        if(exact >= 0) choose(exact);
+        else if(matches.length === 1) choose(matches[0].index);
+        else input.value = STOPS[Number(select.value)] || "";
+      }
       suggestions.classList.remove("open");
       input.setAttribute("aria-expanded","false");
     }, 120);
@@ -447,7 +548,6 @@ function calc(){
   renderResult(value, inferred, i, j, routeLabel);
 }
 
-document.getElementById("calc").onclick = calc;
 document.getElementById("swap").onclick = () => {
   const x = F.value; F.value = A.value; A.value = x;
   fromSearch.sync(); toSearch.sync();
