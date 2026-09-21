@@ -71,7 +71,7 @@
   h1{position:relative;z-index:1;margin:0;font-size:23px;font-weight:800;letter-spacing:-.025em;line-height:1.1;font-family:'Inter',sans-serif}
   header .sub{position:relative;z-index:1;margin-top:5px;font-size:13px;color:#E1E7F2}
 
-  main{padding:18px 16px 38px;flex:1}
+  main{padding:18px 16px 38px;flex:1;padding-bottom:calc(38px + env(safe-area-inset-bottom,0px))}
 
   .card{
     position:relative;z-index:3;border-radius:var(--radius-lg);padding:19px;margin-bottom:16px;
@@ -109,11 +109,17 @@
     pointer-events:none;
   }
   .suggestions{
-    position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:20;display:none;
+    position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:100;display:none;
     max-height:min(300px,44vh);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;
     box-shadow:0 12px 28px rgba(24,42,82,.18);padding:6px;
     -webkit-overflow-scrolling:touch;
   }
+  .suggestions.flip-up{top:auto;bottom:calc(100% + 6px)}
+  .recent-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:7px 9px 5px}
+  .recent-list{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}
+  .recent-chip{flex:0 0 auto;border:1px solid #D5DDE9;background:#F5F7FA;color:var(--blue-deep);border-radius:999px;padding:8px 11px;font:700 12px 'Inter',sans-serif}
+  .recent-chip:active{background:var(--info-soft)}
+  .recent-empty{font-size:12px;color:var(--muted);padding:4px 9px 8px}
   .suggestions.open{display:block}
   .suggestion{
     width:100%;display:block;border:0;background:transparent;box-shadow:none;border-radius:10px;
@@ -348,124 +354,181 @@ function highlight(name, qTokens){
   return open ? out + "</mark>" : out;
 }
 
+const RECENT_KEY = "sta_recent_stops_v1";
+function getRecent(){
+  try{
+    const ids=JSON.parse(localStorage.getItem(RECENT_KEY)||"[]");
+    return Array.isArray(ids) ? ids.filter(i=>Number.isInteger(i)&&i>=0&&i<STOPS.length) : [];
+  }catch(_){ return []; }
+}
+function rememberRecent(index){
+  const ids=getRecent().filter(i=>i!==index);
+  ids.unshift(index);
+  try{ localStorage.setItem(RECENT_KEY, JSON.stringify(ids.slice(0,6))); }catch(_){}
+}
+function scrollFieldIntoView(input){
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{
+      const vv=window.visualViewport;
+      const keyboardTop=vv ? vv.height : window.innerHeight;
+      const r=input.getBoundingClientRect();
+      const margin=14;
+      if(r.bottom > keyboardTop-margin){
+        window.scrollBy({top:r.bottom-(keyboardTop-margin),behavior:"smooth"});
+      }else if(r.top < margin){
+        window.scrollBy({top:r.top-margin,behavior:"smooth"});
+      }
+    },40);
+  });
+}
+function positionSuggestions(input,suggestions){
+  const vv=window.visualViewport;
+  const rect=input.getBoundingClientRect();
+  const viewportBottom=vv ? vv.height : window.innerHeight;
+  const spaceBelow=viewportBottom-rect.bottom-10;
+  const spaceAbove=rect.top-10;
+  const needed=Math.min(300, Math.max(150, spaceBelow));
+  const flip=spaceBelow<170 && spaceAbove>spaceBelow;
+  suggestions.classList.toggle("flip-up",flip);
+  suggestions.style.maxHeight=Math.max(120,Math.min(300,flip?spaceAbove-10:spaceBelow))+"px";
+}
 function setupAutocomplete(select, input, suggestions){
-  let activeIndex = -1;
+  let activeIndex=-1;
+  let committedIndex=Number(select.value);
 
   function currentMatches(query){
-    const qTokens = tokenize(query);
+    const qTokens=tokenize(query);
     if(!qTokens.length) return STOPS.map((name,index)=>({name,index}));
     return STOPS.map((name,index)=>({name,index,score:scoreStop(index,qTokens)}))
-      .filter(item => item.score >= 0)
-      .sort((a,b) => b.score - a.score);   // a pari punteggio resta l'ordine alfabetico
+      .filter(item=>item.score>=0)
+      .sort((a,b)=>b.score-a.score);
   }
 
-  function render(query, open=true){
-    const qTokens = tokenize(query);
-    const matches = currentMatches(query);
-
-    suggestions.innerHTML = matches.length
-      ? matches.map(item=>`<button type="button" class="suggestion" role="option" id="${input.id}-opt-${item.index}" data-index="${item.index}" aria-selected="false">${highlight(item.name, qTokens)}</button>`).join("")
-      : `<div class="suggestion-empty">Nessuna località trovata</div>`;
-
-    suggestions.scrollTop = 0;
-    activeIndex = -1;
+  function render(query,open=true){
+    const qTokens=tokenize(query);
+    const matches=currentMatches(query);
+    const recent=getRecent();
+    let recentHtml="";
+    if(!qTokens.length && recent.length){
+      recentHtml='<div class="recent-label">Recenti</div><div class="recent-list">'+
+        recent.map(index=>'<button type="button" class="recent-chip" data-index="'+index+'">'+STOPS[index]+'</button>').join("")+
+        '</div>';
+    }
+    suggestions.innerHTML=recentHtml+(matches.length
+      ? matches.slice(0,qTokens.length?8:12).map(item=>'<button type="button" class="suggestion" role="option" id="'+input.id+'-opt-'+item.index+'" data-index="'+item.index+'" aria-selected="false">'+highlight(item.name,qTokens)+'</button>').join("")
+      : '<div class="suggestion-empty">Nessuna località trovata</div>');
+    suggestions.scrollTop=0;
+    activeIndex=-1;
     input.removeAttribute("aria-activedescendant");
-    if(open) {
+    if(open){
       suggestions.classList.add("open");
       input.setAttribute("aria-expanded","true");
+      positionSuggestions(input,suggestions);
     }
   }
 
   function markActive(items){
     items.forEach((el,k)=>{
-      const on = k === activeIndex;
-      el.classList.toggle("active", on);
-      el.setAttribute("aria-selected", on ? "true" : "false");
+      const on=k===activeIndex;
+      el.classList.toggle("active",on);
+      el.setAttribute("aria-selected",on?"true":"false");
     });
-    if(activeIndex >= 0){
+    if(activeIndex>=0){
       items[activeIndex].scrollIntoView({block:"nearest"});
-      input.setAttribute("aria-activedescendant", items[activeIndex].id);
+      input.setAttribute("aria-activedescendant",items[activeIndex].id);
     }
   }
 
-  function choose(index){
-    if(index == null || index < 0 || index >= STOPS.length) return;
-    select.value = String(index);
-    input.value = STOPS[index];
+  function choose(index,focusNext=true){
+    if(index==null||index<0||index>=STOPS.length)return;
+    select.value=String(index);
+    committedIndex=index;
+    input.value=STOPS[index];
+    rememberRecent(index);
     suggestions.classList.remove("open");
     input.setAttribute("aria-expanded","false");
     input.removeAttribute("aria-activedescendant");
-    select.dispatchEvent(new Event("change", {bubbles:true}));
+    select.dispatchEvent(new Event("change",{bubbles:true}));
+    if(select===A){
+      input.blur();
+    }
+    if(focusNext && select===F){
+      const otherInput=document.getElementById("to-search");
+      if(otherInput){
+        setTimeout(()=>{
+          otherInput.focus();
+          scrollFieldIntoView(otherInput);
+        },60);
+      }
+    }
   }
 
-  input.addEventListener("focus", () => {
-    // Al tocco il campo viene svuotato: l'utente può iniziare a digitare
-    // immediatamente, senza dover cancellare manualmente la località precedente.
-    input.value = "";
+  input.addEventListener("focus",()=>{
+    input.value="";
     input.select();
-    render("", true);
+    scrollFieldIntoView(input);
+    render("",true);
   });
-  input.addEventListener("input", () => render(input.value, true));
-  input.addEventListener("keydown", (event) => {
-    const items = suggestions.querySelectorAll(".suggestion");
-    if(event.key === "ArrowDown"){
-      event.preventDefault();
-      if(!items.length) return;
-      activeIndex = (activeIndex + 1) % items.length;
-      markActive(items);
-    } else if(event.key === "ArrowUp"){
-      event.preventDefault();
-      if(!items.length) return;
-      activeIndex = (activeIndex - 1 + items.length) % items.length;
-      markActive(items);
-    } else if(event.key === "Enter"){
-      if(activeIndex >= 0 && items[activeIndex]){
-        event.preventDefault();
-        choose(Number(items[activeIndex].dataset.index));
-      } else {
-        const exact = STOPS.findIndex(name => normalizeSearch(name) === normalizeSearch(input.value));
-        if(exact >= 0){ event.preventDefault(); choose(exact); return; }
-        const matches = currentMatches(input.value);
-        if(matches.length === 1){ event.preventDefault(); choose(matches[0].index); }
+  input.addEventListener("input",()=>{
+    render(input.value,true);
+    scrollFieldIntoView(input);
+  });
+  input.addEventListener("keydown",(event)=>{
+    const items=suggestions.querySelectorAll(".suggestion");
+    if(event.key==="ArrowDown"){
+      event.preventDefault(); if(!items.length)return;
+      activeIndex=(activeIndex+1)%items.length; markActive(items);
+    }else if(event.key==="ArrowUp"){
+      event.preventDefault(); if(!items.length)return;
+      activeIndex=(activeIndex-1+items.length)%items.length; markActive(items);
+    }else if(event.key==="Enter"){
+      if(activeIndex>=0&&items[activeIndex]){
+        event.preventDefault(); choose(Number(items[activeIndex].dataset.index)); return;
       }
-    } else if(event.key === "Escape"){
-      suggestions.classList.remove("open");
-      input.setAttribute("aria-expanded","false");
+      const exact=STOPS.findIndex(name=>normalizeSearch(name)===normalizeSearch(input.value));
+      if(exact>=0){event.preventDefault();choose(exact);return;}
+      const matches=currentMatches(input.value);
+      if(matches.length===1){event.preventDefault();choose(matches[0].index);}
+    }else if(event.key==="Escape"){
+      suggestions.classList.remove("open"); input.setAttribute("aria-expanded","false");
     }
   });
 
-  suggestions.addEventListener("mousedown", event => event.preventDefault());
-  suggestions.addEventListener("click", event => {
-    const option = event.target.closest(".suggestion");
-    if(option) choose(Number(option.dataset.index));
+  suggestions.addEventListener("mousedown",event=>event.preventDefault());
+  suggestions.addEventListener("click",event=>{
+    const recent=event.target.closest(".recent-chip");
+    const option=event.target.closest(".suggestion");
+    if(recent){choose(Number(recent.dataset.index));return;}
+    if(option)choose(Number(option.dataset.index));
   });
 
-  input.addEventListener("blur", () => {
-    setTimeout(() => {
-      // Il campo non deve mai restare con un testo parziale mentre il biglietto
-      // calcola un'altra fermata: o il testo corrisponde a una località (e allora
-      // viene selezionata), o si ripristina quella attiva.
-      const typed = input.value.trim();
-      if(!typed){
-        input.value = STOPS[Number(select.value)] || "";
-      } else {
-        const exact = STOPS.findIndex(name => normalizeSearch(name) === normalizeSearch(typed));
-        const matches = exact >= 0 ? null : currentMatches(typed);
-        if(exact >= 0) choose(exact);
-        else if(matches.length === 1) choose(matches[0].index);
-        else input.value = STOPS[Number(select.value)] || "";
+  input.addEventListener("blur",()=>{
+    setTimeout(()=>{
+      const typed=input.value.trim();
+      if(!typed){input.value=STOPS[committedIndex]||"";}
+      else{
+        const exact=STOPS.findIndex(name=>normalizeSearch(name)===normalizeSearch(typed));
+        const matches=exact>=0?null:currentMatches(typed);
+        if(exact>=0)choose(exact,false);
+        else if(matches.length===1)choose(matches[0].index,false);
+        else input.value=STOPS[committedIndex]||"";
       }
       suggestions.classList.remove("open");
       input.setAttribute("aria-expanded","false");
-    }, 120);
+    },140);
   });
 
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize",()=>{if(suggestions.classList.contains("open"))positionSuggestions(input,suggestions);});
+    window.visualViewport.addEventListener("scroll",()=>{if(suggestions.classList.contains("open"))positionSuggestions(input,suggestions);});
+  }
+  window.addEventListener("resize",()=>{if(suggestions.classList.contains("open"))positionSuggestions(input,suggestions);});
+
   return {
-    sync(){ input.value = STOPS[Number(select.value)] || ""; },
-    open(){ render(input.value, true); }
+    sync(){committedIndex=Number(select.value);input.value=STOPS[committedIndex]||"";},
+    open(){render(input.value,true);}
   };
 }
-
 const fromSearch = setupAutocomplete(F, document.getElementById("from-search"), document.getElementById("from-suggestions"));
 const toSearch = setupAutocomplete(A, document.getElementById("to-search"), document.getElementById("to-suggestions"));
 fromSearch.sync();
