@@ -117,9 +117,9 @@
   .suggestions.flip-up{top:auto;bottom:calc(100% + 6px)}
   .recent-block{display:none;margin-top:8px}
   .recent-block.open{display:block}
-  .recent-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 2px 5px}
+  .recent-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--red);padding:0 2px 5px}
   .recent-list{display:flex;gap:7px;overflow-x:auto;padding:0 1px 2px;-webkit-overflow-scrolling:touch}
-  .recent-chip{flex:0 0 auto;border:1px solid #D5DDE9;background:#F5F7FA;color:var(--blue-deep);border-radius:999px;padding:8px 11px;font:700 12px 'Inter',sans-serif;white-space:nowrap}
+  .recent-chip{flex:0 0 auto;border:1px solid #B9C7E1;background:var(--info-soft);color:var(--blue);border-radius:999px;padding:8px 11px;font:700 12px 'Inter',sans-serif;white-space:nowrap}
   .recent-chip:active{background:var(--info-soft)}
   .suggestions.open{display:block}
   .suggestion{
@@ -207,7 +207,7 @@
 
   <main>
     <section class="card">
-      <label for="from"><span class="idx">A</span>Partenza</label>
+      <label for="from-search"><span class="idx">A</span>Partenza</label>
       <div class="select-wrap autocomplete-wrap">
         <select id="from" class="search-select-native" aria-hidden="true" tabindex="-1"></select>
         <input id="from-search" class="autocomplete-input" type="search" inputmode="search" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Cerca località..." role="combobox" aria-autocomplete="list" aria-controls="from-suggestions" aria-expanded="false">
@@ -461,6 +461,7 @@ function setupAutocomplete(select, input, suggestions, recentBlock){
     suggestions.classList.remove("open");
     input.setAttribute("aria-expanded","false");
     input.removeAttribute("aria-activedescendant");
+    render("",false);
     select.dispatchEvent(new Event("change",{bubbles:true}));
     if(select===A){
       input.blur();
@@ -542,13 +543,16 @@ function setupAutocomplete(select, input, suggestions, recentBlock){
 
   return {
     sync(){committedIndex=Number(select.value);input.value=STOPS[committedIndex]||"";},
-    open(){render(input.value,true);}
+    open(){render(input.value,true);},
+    showRecent(){render("",false);}
   };
 }
 const fromSearch = setupAutocomplete(F, document.getElementById("from-search"), document.getElementById("from-suggestions"), document.getElementById("from-recent"));
 const toSearch = setupAutocomplete(A, document.getElementById("to-search"), document.getElementById("to-suggestions"), document.getElementById("to-recent"));
 fromSearch.sync();
 toSearch.sync();
+fromSearch.showRecent();
+toSearch.showRecent();
 
 function euro(n){
   return "€ " + n.toFixed(2).replace(".", ",");
