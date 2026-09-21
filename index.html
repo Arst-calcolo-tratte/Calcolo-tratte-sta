@@ -115,11 +115,12 @@
     -webkit-overflow-scrolling:touch;
   }
   .suggestions.flip-up{top:auto;bottom:calc(100% + 6px)}
-  .recent-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:7px 9px 5px}
-  .recent-list{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 8px;-webkit-overflow-scrolling:touch}
-  .recent-chip{flex:0 0 auto;border:1px solid #D5DDE9;background:#F5F7FA;color:var(--blue-deep);border-radius:999px;padding:8px 11px;font:700 12px 'Inter',sans-serif}
+  .recent-block{display:none;margin-top:8px}
+  .recent-block.open{display:block}
+  .recent-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 2px 5px}
+  .recent-list{display:flex;gap:7px;overflow-x:auto;padding:0 1px 2px;-webkit-overflow-scrolling:touch}
+  .recent-chip{flex:0 0 auto;border:1px solid #D5DDE9;background:#F5F7FA;color:var(--blue-deep);border-radius:999px;padding:8px 11px;font:700 12px 'Inter',sans-serif;white-space:nowrap}
   .recent-chip:active{background:var(--info-soft)}
-  .recent-empty{font-size:12px;color:var(--muted);padding:4px 9px 8px}
   .suggestions.open{display:block}
   .suggestion{
     width:100%;display:block;border:0;background:transparent;box-shadow:none;border-radius:10px;
@@ -210,6 +211,7 @@
       <div class="select-wrap autocomplete-wrap">
         <select id="from" class="search-select-native" aria-hidden="true" tabindex="-1"></select>
         <input id="from-search" class="autocomplete-input" type="search" inputmode="search" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Cerca località..." role="combobox" aria-autocomplete="list" aria-controls="from-suggestions" aria-expanded="false">
+        <div id="from-recent" class="recent-block"></div>
         <div id="from-suggestions" class="suggestions" role="listbox"></div>
       </div>
 
@@ -218,6 +220,7 @@
         <div class="select-wrap autocomplete-wrap">
           <select id="to" class="search-select-native" aria-hidden="true" tabindex="-1"></select>
           <input id="to-search" class="autocomplete-input" type="search" inputmode="search" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Cerca località..." role="combobox" aria-autocomplete="list" aria-controls="to-suggestions" aria-expanded="false">
+          <div id="to-recent" class="recent-block"></div>
           <div id="to-suggestions" class="suggestions" role="listbox"></div>
         </div>
       </div>
@@ -392,7 +395,7 @@ function positionSuggestions(input,suggestions){
   suggestions.classList.toggle("flip-up",flip);
   suggestions.style.maxHeight=Math.max(120,Math.min(300,flip?spaceAbove-10:spaceBelow))+"px";
 }
-function setupAutocomplete(select, input, suggestions){
+function setupAutocomplete(select, input, suggestions, recentBlock){
   let activeIndex=-1;
   let committedIndex=Number(select.value);
 
@@ -408,16 +411,26 @@ function setupAutocomplete(select, input, suggestions){
     const qTokens=tokenize(query);
     const matches=currentMatches(query);
     const recent=getRecent();
-    let recentHtml="";
-    if(!qTokens.length && recent.length){
-      recentHtml='<div class="recent-label">Recenti</div><div class="recent-list">'+
-        recent.map(index=>'<button type="button" class="recent-chip" data-index="'+index+'">'+STOPS[index]+'</button>').join("")+
-        '</div>';
+    if(!qTokens.length){
+      recentBlock.innerHTML=recent.length
+        ? '<div class="recent-label">Recenti</div><div class="recent-list">'+recent.map(index=>'<button type="button" class="recent-chip" data-index="'+index+'">'+STOPS[index]+'</button>').join("")+'</div>'
+        : "";
+      recentBlock.classList.toggle("open",recent.length>0);
+      suggestions.innerHTML="";
+      suggestions.classList.remove("open");
+      input.setAttribute("aria-expanded","false");
+    }else{
+      recentBlock.classList.remove("open");
+      suggestions.innerHTML=matches.length
+        ? matches.slice(0,8).map(item=>'<button type="button" class="suggestion" role="option" id="'+input.id+'-opt-'+item.index+'" data-index="'+item.index+'" aria-selected="false">'+highlight(item.name,qTokens)+'</button>').join("")
+        : '<div class="suggestion-empty">Nessuna località trovata</div>';
+      suggestions.scrollTop=0;
+      if(open){
+        suggestions.classList.add("open");
+        input.setAttribute("aria-expanded","true");
+        positionSuggestions(input,suggestions);
+      }
     }
-    suggestions.innerHTML=recentHtml+(matches.length
-      ? matches.slice(0,qTokens.length?8:12).map(item=>'<button type="button" class="suggestion" role="option" id="'+input.id+'-opt-'+item.index+'" data-index="'+item.index+'" aria-selected="false">'+highlight(item.name,qTokens)+'</button>').join("")
-      : '<div class="suggestion-empty">Nessuna località trovata</div>');
-    suggestions.scrollTop=0;
     activeIndex=-1;
     input.removeAttribute("aria-activedescendant");
     if(open){
@@ -496,10 +509,13 @@ function setupAutocomplete(select, input, suggestions){
 
   suggestions.addEventListener("mousedown",event=>event.preventDefault());
   suggestions.addEventListener("click",event=>{
-    const recent=event.target.closest(".recent-chip");
     const option=event.target.closest(".suggestion");
-    if(recent){choose(Number(recent.dataset.index));return;}
     if(option)choose(Number(option.dataset.index));
+  });
+  recentBlock.addEventListener("mousedown",event=>event.preventDefault());
+  recentBlock.addEventListener("click",event=>{
+    const recent=event.target.closest(".recent-chip");
+    if(recent)choose(Number(recent.dataset.index));
   });
 
   input.addEventListener("blur",()=>{
@@ -529,8 +545,8 @@ function setupAutocomplete(select, input, suggestions){
     open(){render(input.value,true);}
   };
 }
-const fromSearch = setupAutocomplete(F, document.getElementById("from-search"), document.getElementById("from-suggestions"));
-const toSearch = setupAutocomplete(A, document.getElementById("to-search"), document.getElementById("to-suggestions"));
+const fromSearch = setupAutocomplete(F, document.getElementById("from-search"), document.getElementById("from-suggestions"), document.getElementById("from-recent"));
+const toSearch = setupAutocomplete(A, document.getElementById("to-search"), document.getElementById("to-suggestions"), document.getElementById("to-recent"));
 fromSearch.sync();
 toSearch.sync();
 
