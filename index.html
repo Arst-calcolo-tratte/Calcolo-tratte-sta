@@ -449,6 +449,9 @@ function setupAutocomplete(select, input, suggestions){
     input.setAttribute("aria-expanded","false");
     input.removeAttribute("aria-activedescendant");
     select.dispatchEvent(new Event("change",{bubbles:true}));
+    if(select===A){
+      input.blur();
+    }
     if(focusNext && select===F){
       const otherInput=document.getElementById("to-search");
       if(otherInput){
