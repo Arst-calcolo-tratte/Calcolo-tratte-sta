@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#10131a">
+  <title>SocialClip — Video converter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark">SC</span><span>SocialClip</span></a>
+      <span class="top-note">VIDEO TOOLKIT</span>
+    </header>
+    <section class="hero">
+      <div class="eyebrow"><span class="pulse"></span> IL TUO LABORATORIO VIDEO</div>
+      <h1>Un link.<br><span>Il formato che vuoi.</span></h1>
+      <p class="intro">Incolla un collegamento video e trasformalo in una clip, una GIF o un file audio. Semplice, veloce, senza passaggi inutili.</p>
+    </section>
+    <section class="workspace">
+      <div class="step-heading"><span class="step-number">01</span><div><h2>Inserisci il link</h2><p>YouTube, TikTok, Instagram e altre fonti supportate</p></div></div>
+      <form id="convert-form">
+        <label class="sr-only" for="video-url">URL del video</label>
+        <div class="url-box">
+          <span class="link-icon">↗</span>
+          <input id="video-url" type="url" placeholder="https://…" required autocomplete="url">
+          <button class="paste-btn" id="paste-btn" type="button">INCOLLA</button>
+        </div>
+        <p class="helper">Sono supportati solo link pubblici e contenuti che sei autorizzato a salvare. Alcune piattaforme possono limitare l'estrazione.</p>
+        <div class="section-rule"></div>
+        <div class="step-heading compact"><span class="step-number">02</span><div><h2>Scegli il formato</h2><p>Come vuoi ottenere il contenuto?</p></div></div>
+        <div class="format-grid">
+          <label class="format-card selected">
+            <input type="radio" name="format" value="mp4" checked>
+            <span class="format-icon">▶</span><span class="format-title">Video MP4</span><span class="format-sub">Clip video con audio</span>
+            <span class="radio-dot"></span>
+          </label>
+          <label class="format-card">
+            <input type="radio" name="format" value="gif">
+            <span class="format-icon gif-icon">GIF</span><span class="format-title">GIF animata</span><span class="format-sub">Breve e condivisibile</span>
+            <span class="radio-dot"></span>
+          </label>
+          <label class="format-card">
+            <input type="radio" name="format" value="mp3">
+            <span class="format-icon audio-icon">♫</span><span class="format-title">Audio MP3</span><span class="format-sub">Solo traccia audio</span>
+            <span class="radio-dot"></span>
+          </label>
+        </div>
+        <div class="options-panel">
+          <div class="options-title"><span>03</span><strong>Personalizza l'output</strong><small>OPZIONALE</small></div>
+          <div id="video-options" class="option-grid">
+            <label>Qualità video<select id="quality"><option value="best">Migliore disponibile</option><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="360">360p</option></select></label>
+            <label>Intervallo<select id="clip-mode"><option value="full">Video completo</option><option value="clip">Solo una clip</option></select></label>
+          </div>
+          <div id="clip-fields" class="option-grid hidden">
+            <label>Inizio (secondi)<input id="clip-start" type="number" min="0" value="0" step="1"></label>
+            <label>Fine (secondi)<input id="clip-end" type="number" min="1" placeholder="es. 25" step="1"></label>
+          </div>
+          <div id="gif-options" class="option-grid hidden">
+            <label>Durata GIF<select id="gif-duration"><option value="5">5 secondi</option><option value="10" selected>10 secondi</option><option value="15">15 secondi</option><option value="20">20 secondi</option></select></label>
+            <label>Dimensione<select id="gif-size"><option value="480">480 px — standard</option><option value="320">320 px — leggera</option><option value="640">640 px — alta</option></select></label>
+          </div>
+          <div id="audio-options" class="option-grid hidden">
+            <label>Qualità audio<select id="audio-quality"><option value="192">192 kbps — consigliata</option><option value="320">320 kbps — alta</option><option value="128">128 kbps — leggera</option></select></label>
+            <label>Intervallo<select id="audio-mode"><option value="full">Audio completo</option><option value="clip">Solo una clip</option></select></label>
+          </div>
+        </div>
+        <label class="consent"><input id="rights-check" type="checkbox" required><span>Confermo di avere il diritto o l'autorizzazione a scaricare e convertire questo contenuto.</span></label>
+        <button class="convert-btn" id="convert-btn" type="submit"><span>Avvia conversione</span><span class="arrow">↗</span></button>
+      </form>
+      <section id="status-panel" class="status-panel hidden" aria-live="polite">
+        <div class="status-head"><span class="spinner" id="spinner"></span><strong id="status-title">Preparazione…</strong><span id="status-percent"></span></div>
+        <p id="status-message">Il server sta elaborando il contenuto.</p>
+        <div class="progress-track"><div id="progress-bar"></div></div>
+        <a id="download-link" class="download-btn hidden" href="#">Scarica il file <span>↓</span></a>
+      </section>
+      <div class="privacy-note"><span class="lock">◇</span><span><strong>Privacy prima di tutto.</strong> I file temporanei vengono eliminati automaticamente dal server dopo l'elaborazione.</span></div>
+    </section>
+    <footer><span>SocialClip © 2026</span><span>Non affiliato alle piattaforme social.</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
